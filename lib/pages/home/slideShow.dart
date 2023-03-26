@@ -79,8 +79,8 @@ class _SlideShowState extends State<SlideShow> {
                     children: List.generate(
                       5,
                       (i) => Container(
-                        width: 8.0,
-                        height: 8.0,
+                        width: 6.0,
+                        height: 6.0,
                         margin: EdgeInsets.symmetric(
                           vertical: 10.0,
                           horizontal: 2.0,

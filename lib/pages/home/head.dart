@@ -79,14 +79,29 @@ class Head extends StatelessWidget {
       //   ),
       // ),
       bottom: TabBar(
+
+        onTap: (index) {
+          print(index);
+        },
+        labelStyle: TextStyle(fontSize: 16.0),
+        unselectedLabelStyle: TextStyle(fontSize: 11.0),
+        //指示器大小
         indicatorSize: TabBarIndicatorSize.tab,
+        //标签左右的内边距
         labelPadding: EdgeInsets.only(left: 8.0, right: 8.0),
+        //控制器
         controller: tabController,
+        //是否可滚动
         isScrollable: true,
+        //指示器颜色
         indicatorColor: Colors.blue,
+        //选中标签的文本颜色
         labelColor: Colors.blue,
+        //未选中标签的文本颜色
         unselectedLabelColor: Colors.grey,
+        //标签
         tabs: [
+          //将tags中的每个元素转换成一个Tab，并将它们组成列表
           ...tags.map((tag) => Tab(text: tag)).toList(),
         ],
       ),

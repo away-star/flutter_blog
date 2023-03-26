@@ -131,10 +131,12 @@ class _PersonState extends State<Person> {
                     children: [
                       Icon(Icons.code_sharp, color: Colors.grey[700], size: 20),
                       SizedBox(width: 5),
-                      Text(
-                        'https://github.com/user.name',
-                        style: TextStyle(
-                          color: Colors.blue,
+                      Expanded(
+                        child: Text(
+                          'https://github.com/xingxing2064989403/flutter_blog',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ],
