@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:markdown_widget/config/all.dart';
 import 'package:my_blog/common/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:my_blog/pages/detail/MyMD.dart';
+
+
 
 class Person extends StatefulWidget {
-  const Person({Key? key}) : super(key: key);
+  final tocContorllr = TocController();
+
+  Person({Key? key}) : super(key: key);
 
   @override
   State<Person> createState() => _PersonState();
@@ -99,7 +105,7 @@ class _PersonState extends State<Person> {
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: Colors.grey[500],
-                            fontSize: 18,
+                            fontSize: 14,
                           ),
                         ),
                       ),
@@ -154,6 +160,22 @@ class _PersonState extends State<Person> {
                       ),
                     ],
                   ),
+                  MarkdownPage(data:
+                  """
+# 建站说明
+对于移动应用开发来说，你可以使用
+```python
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+```
+来建立一个**web前端**
+                  """, tocController: widget.tocContorllr),
                 ],
               ),
             ),

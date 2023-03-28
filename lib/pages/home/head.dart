@@ -18,6 +18,7 @@ class Head extends StatelessWidget {
       centerTitle: false,
       snap: true,
       backgroundColor: Colors.white,
+
       leading: GestureDetector(
         onTap: () {
           var route = PageRouteBuilder(
@@ -81,6 +82,7 @@ class Head extends StatelessWidget {
       bottom: TabBar(
 
         onTap: (index) {
+          
           print(index);
         },
         labelStyle: TextStyle(fontSize: 16.0),
@@ -105,6 +107,7 @@ class Head extends StatelessWidget {
           ...tags.map((tag) => Tab(text: tag)).toList(),
         ],
       ),
+
     );
   }
 }

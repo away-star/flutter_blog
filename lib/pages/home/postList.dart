@@ -9,9 +9,10 @@ class Post {
   final String content;
   final String author;
   final String date;
-  final String tag;           // 分类
+  final String tag; // 分类
   final String image;
   final String thume_up_num; // 点赞数量
+  final List<String> comments; // 评论
   final String id;
 
   const Post({
@@ -22,6 +23,7 @@ class Post {
     required this.tag,
     required this.image,
     required this.thume_up_num,
+    required this.comments,
     required this.id,
   });
 }
@@ -57,6 +59,7 @@ class PostList extends StatelessWidget {
                       tag: posts[index].tag,
                       image: posts[index].image,
                       thume_up_num: posts[index].thume_up_num,
+                      comments: posts[index].comments,
                       id: posts[index].id,
                     ),
                   ),
@@ -72,7 +75,8 @@ class PostList extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: CachedNetworkImage(
-                      imageUrl: 'https://picsum.photos/seed/${index + 1}/600/400',
+                      imageUrl:
+                          'https://picsum.photos/seed/${index + 1}/600/400',
                       placeholder: (context, url) => Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -81,22 +85,22 @@ class PostList extends StatelessWidget {
                   ),
                   SizedBox(height: 10.0),
                   Text(
-                    '文章标题',
+                    '${posts[index].title}',
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 5.0),
-                  Text(
-                    '文章内容',
-                    style: TextStyle(
-                      fontSize: 16.0,
+
+                  Container(
+                    child: Text(
+                      '${posts[index].content}',
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 16.0),
                     ),
-                    //通过以下设置让它只显示3行
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                   ),
+
                   // myMarkdown(markdown: "markdown"),
                   SizedBox(height: 10.0),
                   Row(
@@ -110,7 +114,7 @@ class PostList extends StatelessWidget {
                       // ),
                       SizedBox(width: 5.0),
                       Text(
-                        '12 Comments',
+                        '${posts[index].comments.length} Comments',
                         style: TextStyle(
                           fontSize: 16.0,
                         ),
