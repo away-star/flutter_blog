@@ -9,8 +9,10 @@ class Post {
   final String content;
   final String author;
   final String date;
-  final String tag;
+  final String tag;           // 分类
   final String image;
+  final String thume_up_num; // 点赞数量
+  final String id;
 
   const Post({
     required this.title,
@@ -19,6 +21,8 @@ class Post {
     required this.date,
     required this.tag,
     required this.image,
+    required this.thume_up_num,
+    required this.id,
   });
 }
 
@@ -46,8 +50,14 @@ class PostList extends StatelessWidget {
                   // ),
                   MaterialPageRoute(
                     builder: (context) => ArticleDetailPage(
-                      title: '文章标题',
-                      content: posts[0].content,
+                      title: posts[index].title,
+                      content: posts[index].content,
+                      author: posts[index].author,
+                      date: posts[index].date,
+                      tag: posts[index].tag,
+                      image: posts[index].image,
+                      thume_up_num: posts[index].thume_up_num,
+                      id: posts[index].id,
                     ),
                   ),
                 );
@@ -91,10 +101,13 @@ class PostList extends StatelessWidget {
                   SizedBox(height: 10.0),
                   Row(
                     children: [
-                      SvgPicture.asset(
-                        'assets/images/avatar.jpg',
-                        height: 16.0,
-                      ),
+                      //!?? SVG这里格式会报错？
+                      //!这里不是svg格式，可以加载？
+                      // SvgPicture.asset(
+                      //   'assets/images/avatar.jpg',
+                      //   width: 20.0,
+                      //   height: 20.0,
+                      // ),
                       SizedBox(width: 5.0),
                       Text(
                         '12 Comments',

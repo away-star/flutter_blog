@@ -7,6 +7,7 @@ import 'package:my_blog/pages/home/head.dart';
 import 'package:my_blog/pages/home/postList.dart';
 import 'package:my_blog/pages/home/slideShow.dart';
 import 'package:my_blog/services/homeAPI.dart';
+import 'dart:math';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -31,11 +32,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     "Music",
     "Entertainment"
   ];
-  String mk = "home";
+  late List<Post> posts;
 
   @override
   void initState() {
     super.initState();
+    posts = generatePosts();    //初始化生成数据
+    print(posts);
     print("我被执行了");
 
     _tabController = TabController(length: _tags.length, vsync: this);
@@ -47,31 +50,42 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+//! 造数据，这里展示20条数据
+  List<Post> generatePosts() {
+    List<Post> fake = [];
+    for (int i = 0; i < 10; i++) {
+      fake.add(Post(
+        title: "title$i",
+        content: "content$i",
+        author: "author$i",
+        date: "date$i",
+        tag: "tag$i",
+        image: Random().nextInt(10).toString(),                //! 后面索引是10张图片，这里就用索引
+        thume_up_num: Random().nextInt(1000).toString(),
+        id: "$i",
+      ));
+    }
+    return fake;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-          slivers: [
+        slivers: [
           Head(tabController: _tabController, tags: _tags),
-      SlideShow(),
-      PostList(posts: [
-        Post(
-          title: "Flutter 2.0 发布，全新的 Dart 语言特性",
-          content: mk,
-          author: 's',
-          date: 's',
-          tag: 's',
-          image: 's',)
-          ],),
-      ],
+          SlideShow(),
+          PostList(posts: this.posts),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           print(HomeAPI.getBaseData("SS"));
-          final data = await HomeAPI.getBaseData("SS");
+          final data = await HomeAPI.getBaseData("");
           print(data['data']['records'][5]['content']);
           setState(() {
-            mk = data['data']['records'][5]['content'];
+            // posts = generatePosts();
+            // posts = data['data']['records'];
           });
         },
         child: const Icon(Icons.add),
