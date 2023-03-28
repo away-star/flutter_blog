@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_blog/pages/detail/MyMD.dart';
 import 'package:my_blog/pages/detail/detail.dart';
 
 class Post {
@@ -37,6 +38,12 @@ class PostList extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
+                  // MaterialPageRoute(
+                  //   builder: (context) => ArticleDetailPage(
+                  //     title: '文章标题',
+                  //     content: posts[0].content,
+                  //   ),
+                  // ),
                   MaterialPageRoute(
                     builder: (context) => ArticleDetailPage(
                       title: '文章标题',

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_blog/common/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Person extends StatefulWidget {
   const Person({Key? key}) : super(key: key);
@@ -129,13 +133,22 @@ class _PersonState extends State<Person> {
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      Icon(Icons.code_sharp, color: Colors.grey[700], size: 20),
+                      // Icon(Icons.code_sharp, color: Colors.grey[700], size: 20),
+                      FaIcon(FontAwesomeIcons.github,
+                          color: Colors.grey[700], size: 20),
                       SizedBox(width: 5),
                       Expanded(
-                        child: Text(
-                          'https://github.com/xingxing2064989403/flutter_blog',
-                          style: TextStyle(
-                            color: Colors.blue,
+                        child: GestureDetector(
+                          onTap: () {
+                            //打开网页
+                            //launch(githubAddr);
+                            launchUrlString(githubAddr);
+                          },
+                          child: Text(
+                            githubAddr,
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
                           ),
                         ),
                       ),

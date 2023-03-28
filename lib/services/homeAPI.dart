@@ -20,7 +20,7 @@ class HomeAPI {
     final response = await http.get(Uri.parse('$baseUrl/$endpoint'));
     if (response.statusCode == 200) {
       // 返回解析后的JSON数据
-      return json.decode(response.body);
+      return json.decode(utf8.decode(response.bodyBytes));
     } else {
       // 如果请求失败，抛出异常
       throw Exception('Failed to load data!');
