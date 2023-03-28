@@ -76,7 +76,7 @@ class PostList extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.0),
                     child: CachedNetworkImage(
                       imageUrl:
-                          'https://picsum.photos/seed/${index + 1}/600/400',
+                          'https://picsum.photos/seed/${posts[index].image}/600/400',
                       placeholder: (context, url) => Center(
                         child: CircularProgressIndicator(),
                       ),

@@ -77,12 +77,13 @@ class _PersonState extends State<Person> {
                   Row(
                     children: [
                       Icon(Icons.email_outlined,
-                          color: Colors.grey[700], size: 20),
-                      SizedBox(width: 5),
+                          color: Colors.grey[700], size: 25),
+                      SizedBox(width: 10),
                       Text(
                         '2064989403@qq.com',
                         style: TextStyle(
                           color: Colors.grey[700],
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -97,15 +98,16 @@ class _PersonState extends State<Person> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.bookmark_border,
-                          color: Colors.grey[700], size: 20),
-                      SizedBox(width: 5),
+                          color: Colors.grey[700], size: 27),
+                      SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           'So far all life is written with failure, but this does not prevent me from moving forward',
                           style: TextStyle(
-                            fontStyle: FontStyle.italic,
+                            fontFamily: 'cursive',
+                            // fontStyle: FontStyle.italic,
                             color: Colors.grey[500],
-                            fontSize: 14,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -119,19 +121,20 @@ class _PersonState extends State<Person> {
                   Row(
                     children: [
                       Icon(Icons.location_on,
-                          color: Colors.grey[700], size: 20),
-                      SizedBox(width: 5),
+                          color: Colors.grey[700], size: 25),
+                      SizedBox(width: 10),
                       Text(
                         '三体环境下的一颗太阳上',
                         style: TextStyle(
                           color: Colors.grey[700],
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         '(未授权定位)',
                         style: TextStyle(
                           color: Colors.grey[400],
-                          fontSize: 10,
+                          fontSize: 14,
                         ),
                       ),
                     ],
@@ -141,8 +144,8 @@ class _PersonState extends State<Person> {
                     children: [
                       // Icon(Icons.code_sharp, color: Colors.grey[700], size: 20),
                       FaIcon(FontAwesomeIcons.github,
-                          color: Colors.grey[700], size: 20),
-                      SizedBox(width: 5),
+                          color: Colors.grey[700], size: 25),
+                      SizedBox(width: 10),
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
@@ -160,10 +163,36 @@ class _PersonState extends State<Person> {
                       ),
                     ],
                   ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 2,
+                  ),
                   MarkdownPage(data:
                   """
 # 建站说明
 对于移动应用开发来说，你可以使用
+```python
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+```
+来建立一个**web前端**对于移动应用开发来说，你可以使用
+```python
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick_sort(left) + middle + quick_sort(right)
+```
+来建立一个**web前端**来建立一个**web前端**对于移动应用开发来说，你可以使用
 ```python
 def quick_sort(arr):
     if len(arr) <= 1:

@@ -82,7 +82,7 @@ class Head extends StatelessWidget {
       bottom: TabBar(
 
         onTap: (index) {
-          
+
           print(index);
         },
         labelStyle: TextStyle(fontSize: 16.0),

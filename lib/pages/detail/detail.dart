@@ -93,6 +93,7 @@ class ArticleDetailPage extends StatelessWidget {
                       height: 10,
                     )),
                     Icon(Icons.category, color: Colors.grey[500], size: 16),
+                    SizedBox(width: 5),
                     Text(
                       this.tag,
                       style: TextStyle(

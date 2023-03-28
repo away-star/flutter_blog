@@ -37,7 +37,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    posts = generatePosts();    //初始化生成数据
+    posts = generatePosts(); //初始化生成数据
     print(posts);
     print("我被执行了");
 
@@ -105,15 +105,18 @@ while b < 10:
 在不同的键盘上，反引号的位置可能不同，如果你使用的不是 QWERTY 键盘，可能会很难找到它。这份有用的指南列出了一些寻找回车键的方法，我们将其收集在下面：""",
         author: "author$i",
         date: "date$i",
-        tag: "tag$i",
-        image: Random().nextInt(10).toString(),                //! 后面索引是10张图片，这里就用索引
+        tag: "${_tags[Random().nextInt(_tags.length)]}",
+        image: Random().nextInt(10).toString(),
+        //! 后面索引是10张图片，这里就用索引
         thume_up_num: Random().nextInt(1000).toString(),
-        comments: generateRandomStrings(Random().nextInt(30), 200),      //! 生成10条评论
+        comments: generateRandomStrings(Random().nextInt(30), 200),
+        //! 生成10条评论
         id: "$i",
       ));
     }
     return fake;
   }
+
   List<String> generateRandomStrings(int count, int length) {
     List<String> strings = [];
     Random random = Random();
@@ -132,18 +135,48 @@ while b < 10:
     return strings;
   }
 
-
+  //! 生成tabView视图，这里除了首页调用的参数都是随机生成的
+  List<Widget> generateTabViews() {
+    List<Widget> tabViews = [];
+    for (int i = 0; i < _tags.length; i++) {
+      if (i == 0) {
+        tabViews.add(CustomScrollView(
+          slivers: [
+            Head(tabController: _tabController, tags: _tags),
+            SlideShow(),
+            PostList(posts: this.posts),
+          ],
+        ));
+        continue;
+      }
+      tabViews.add(CustomScrollView(
+        slivers: [
+          Head(tabController: _tabController, tags: _tags),
+          PostList(posts: generatePosts()),
+        ],
+      ));
+    }
+    return tabViews;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          Head(tabController: _tabController, tags: _tags),
-          SlideShow(),
-          PostList(posts: this.posts),
-        ],
+      // !原先单页的代码
+      // body: CustomScrollView(
+      //
+      //   slivers: [
+      //     Head(tabController: _tabController, tags: _tags),
+      //     SlideShow(),
+      //     PostList(posts: this.posts),
+      //   ],
+      // ),
+      body: TabBarView(
+        key: PageStorageKey("PageStorageKey"),
+        controller: _tabController,
+        children: generateTabViews(),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           print(HomeAPI.getBaseData("SS"));
