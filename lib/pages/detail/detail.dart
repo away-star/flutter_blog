@@ -48,6 +48,7 @@ class ArticleDetailPage extends StatelessWidget {
               icon: Icon(Icons.share, color: Colors.black),
               onPressed: () {
                 // add share functionality here
+
               },
             ),
           ],

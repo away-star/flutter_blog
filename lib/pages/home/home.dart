@@ -55,16 +55,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     List<Post> fake = [];
     for (int i = 0; i < 20; i++) {
       fake.add(Post(
-        title: "title$i",
+        title: "${generateRandomStrings(1, 15)[0]}",
         content: """
 你可以使用内联代码格式来强调你所写的一行中的一个小命令或一段语法。
-
 例如，你可能希望提到 JavaScript 的 Array.protoype.map() 方法。通过使用内联代码格式化，可以清楚地看到这是一段代码。你也可以用它来说明一个终端命令，比如 yarn install。
-
 要使用内联代码格式化，只需将你希望格式化的代码用反斜线包起来。在一个标准的 QWERTY 键盘上，可以在 “1” 的左边和 Tab 键的上面找到它。关于键盘上反引号的位置的更多信息，本文下方有介绍。
-
 例如，在 markdown 中写 `Array.prototype.map()` 会呈现为 Array.prototype.map()。
-
 代码块
 要写更长或更详细的代码片段，通常最好把它们放在一个代码块内。代码块允许你使用多行，而 markdown 会在它的后台用代码类型的字体渲染。
 
@@ -142,16 +138,14 @@ while b < 10:
       if (i == 0) {
         tabViews.add(CustomScrollView(
           slivers: [
-            Head(tabController: _tabController, tags: _tags),
             SlideShow(),
-            PostList(posts: this.posts),
+            PostList(posts: generatePosts()),
           ],
         ));
         continue;
       }
       tabViews.add(CustomScrollView(
         slivers: [
-          Head(tabController: _tabController, tags: _tags),
           PostList(posts: generatePosts()),
         ],
       ));
@@ -171,10 +165,16 @@ while b < 10:
       //     PostList(posts: this.posts),
       //   ],
       // ),
-      body: TabBarView(
-        key: PageStorageKey("PageStorageKey"),
-        controller: _tabController,
-        children: generateTabViews(),
+      body: CustomScrollView(
+        slivers: [
+          Head(tabController: _tabController, tags: _tags),
+          SliverFillRemaining(
+            child: TabBarView(
+              controller: _tabController,
+              children: generateTabViews(),
+            ),
+          )
+        ]
       ),
 
       floatingActionButton: FloatingActionButton(

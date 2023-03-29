@@ -65,6 +65,7 @@ class PostList extends StatelessWidget {
                   ),
                 );
               },
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,7 +88,7 @@ class PostList extends StatelessWidget {
                   Text(
                     '${posts[index].title}',
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 20.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -97,7 +98,7 @@ class PostList extends StatelessWidget {
                       '${posts[index].content}',
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16.0),
+                      style: TextStyle(fontSize: 15.0, color: Colors.grey[600]),
                     ),
                   ),
 
@@ -106,17 +107,27 @@ class PostList extends StatelessWidget {
                   Row(
                     children: [
                       //!?? SVG这里格式会报错？
-                      //!这里不是svg格式，可以加载？
+                      //!这里不是svg格式，可以加载？，这里改成了Image.asset
                       // SvgPicture.asset(
-                      //   'assets/images/avatar.jpg',
+                      //   'assets/images/avatar.svg',
                       //   width: 20.0,
                       //   height: 20.0,
                       // ),
-                      SizedBox(width: 5.0),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          'assets/images/avatar.jpg',
+                          width: 20.0,
+                          height: 20.0,
+                        ),
+                      ),
+                      Text(" ${posts[index].author}", style: TextStyle(fontSize: 15.0, color: Colors.grey[600]),),
+                      Expanded(child: SizedBox()),
                       Text(
                         '${posts[index].comments.length} Comments',
                         style: TextStyle(
                           fontSize: 16.0,
+                          color: Colors.grey[500],
                         ),
                       ),
                     ],
@@ -132,3 +143,4 @@ class PostList extends StatelessWidget {
     );
   }
 }
+
