@@ -3,7 +3,6 @@ import 'package:my_blog/pages/home/action.dart';
 import 'package:my_blog/pages/person/person.dart';
 
 class Head extends StatelessWidget {
-
   final tabController;
 
   final List<String> tags;
@@ -23,10 +22,23 @@ class Head extends StatelessWidget {
         onTap: () {
           var route = PageRouteBuilder(
             transitionDuration: Duration(milliseconds: 200),
-            pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => Person(),
-            transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                    Animation<double> secondaryAnimation) =>
+                Person(
+              name: "xingxing",
+              email: "2064989403@qq.com",
+              signature:
+                  "So far all life is written with failure, but this does not prevent me from moving forward",
+              location: "China",
+            ),
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
               return SlideTransition(
-                position: Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset.zero).animate(animation),
+                position:
+                    Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset.zero)
+                        .animate(animation),
                 child: child,
               );
             },
@@ -48,7 +60,7 @@ class Head extends StatelessWidget {
           color: Colors.grey[200],
         ),
         //margin: EdgeInsets.symmetric(horizontal: 15.0),
-        padding: EdgeInsets.only(left: 15,right: 0),
+        padding: EdgeInsets.only(left: 15, right: 0),
         child: Row(
           children: [
             Expanded(
@@ -80,9 +92,7 @@ class Head extends StatelessWidget {
       //   ),
       // ),
       bottom: TabBar(
-
         onTap: (index) {
-
           print(index);
         },
         labelStyle: TextStyle(fontSize: 16.0),
@@ -107,7 +117,6 @@ class Head extends StatelessWidget {
           ...tags.map((tag) => Tab(text: tag)).toList(),
         ],
       ),
-
     );
   }
 }

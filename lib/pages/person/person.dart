@@ -6,12 +6,22 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:my_blog/pages/detail/MyMD.dart';
 
-
-
 class Person extends StatefulWidget {
   final tocContorllr = TocController();
+  final String name;
+  final String email;
 
-  Person({Key? key}) : super(key: key);
+  // final String avatar; // 头像？
+  final String signature;
+  final String location;
+
+  Person({
+    Key? key,
+    required this.name,
+    required this.email,
+    required this.signature,
+    required this.location,
+  }) : super(key: key);
 
   @override
   State<Person> createState() => _PersonState();
@@ -35,11 +45,11 @@ class _PersonState extends State<Person> {
                   height: 200,
                 ),
                 Positioned(
-                  right: 2,
-                  top: 2,
+                  right: 10,
+                  top: 30,
                   child: IconButton(
                     color: Colors.white,
-                    icon: Icon(Icons.clear),
+                    icon: Icon(Icons.keyboard_double_arrow_right, size: 30),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -55,6 +65,19 @@ class _PersonState extends State<Person> {
                     radius: 40,
                   ),
                 ),
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: IconButton(
+                    icon: Icon(Icons.qr_code_2_sharp, color: Colors.white),
+                    onPressed: () {
+                      // add share functionality here
+                      setState(() {
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                )
               ],
             ),
             SizedBox(height: 5),
@@ -66,7 +89,7 @@ class _PersonState extends State<Person> {
                   Padding(
                     padding: const EdgeInsets.only(left: 80),
                     child: Text(
-                      'xingxing',
+                      '${widget.name}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
@@ -80,7 +103,7 @@ class _PersonState extends State<Person> {
                           color: Colors.grey[700], size: 25),
                       SizedBox(width: 10),
                       Text(
-                        '2064989403@qq.com',
+                        '${widget.email}',
                         style: TextStyle(
                           color: Colors.grey[700],
                           fontSize: 14,
@@ -102,7 +125,7 @@ class _PersonState extends State<Person> {
                       SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'So far all life is written with failure, but this does not prevent me from moving forward',
+                          '${widget.signature}',
                           style: TextStyle(
                             fontFamily: 'cursive',
                             // fontStyle: FontStyle.italic,
@@ -124,7 +147,7 @@ class _PersonState extends State<Person> {
                           color: Colors.grey[700], size: 25),
                       SizedBox(width: 10),
                       Text(
-                        '三体环境下的一颗太阳上',
+                        '${widget.location}',
                         style: TextStyle(
                           color: Colors.grey[700],
                           fontSize: 14,
@@ -167,8 +190,8 @@ class _PersonState extends State<Person> {
                     color: Colors.grey[300],
                     thickness: 2,
                   ),
-                  MarkdownPage(data:
-                  """
+
+                  MarkdownPage(data: """
 # 建站说明
 对于移动应用开发来说，你可以使用
 ```python
@@ -205,6 +228,37 @@ def quick_sort(arr):
 ```
 来建立一个**web前端**
                   """, tocController: widget.tocContorllr),
+
+                  //! 结尾
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 2000),
+                    curve: Curves.easeInOut,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF5B86E5),
+                          Color(0xFF36D1DC),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Text(
+                      'Power by Flutter',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontFamily: "cursive",
+                        color: Colors.white,
+                        fontSize: 56.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

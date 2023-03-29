@@ -126,7 +126,7 @@ class PostList extends StatelessWidget {
                       Text(
                         '${posts[index].comments.length} Comments',
                         style: TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           color: Colors.grey[500],
                         ),
                       ),
