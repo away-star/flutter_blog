@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_blog/pages/person/log_page.dart';
+import 'package:my_blog/pages/person/login_page.dart';
 import 'package:my_blog/pages/person/person.dart';
 
 class personList extends StatelessWidget {
@@ -31,11 +31,6 @@ class personList extends StatelessWidget {
                 },
               ),
             ),
-
-
-
-
-
 
             CircleAvatar(
               backgroundImage: AssetImage('assets/images/avatar.jpg'),
@@ -244,6 +239,7 @@ class personList extends StatelessWidget {
                     PopupMenuItem(child: Text('选项三')),
                   ],
                   child: IconButton(
+                    padding: EdgeInsets.fromLTRB(0, 0, 35, 0),
                     icon: Icon(
                       Icons.more_horiz_sharp, color: Colors.grey, size: 35,),
                     onPressed: () {
@@ -254,7 +250,7 @@ class personList extends StatelessWidget {
 
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 15,),
 
 
           ],

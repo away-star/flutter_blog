@@ -102,6 +102,7 @@ class Head extends StatelessWidget {
         isScrollable: true,
         //指示器颜色
         indicatorColor: Colors.blue,
+
         //选中标签的文本颜色
         labelColor: Colors.blue,
         //未选中标签的文本颜色
@@ -111,16 +112,47 @@ class Head extends StatelessWidget {
           //将tags中的每个元素转换成一个Tab，并将它们组成列表
           // ...tags.map((tag) => Tab(text: tag)).toList(),
 
-          Tab(text: 'home'),
-          Tab(text: 'spring boot'),
-          Tab(text: 'spring cloud'),
-          Tab(text: 'react'),
-          Tab(text: 'umi.js'),
-          Tab(text: 'H5'),
-          Tab(text: 'flutter'),
-          Tab(text: 'CSS3'),
-          Tab(text: 'Spaces'),
-          Tab(text: 'Entertainment'),
+          Tab(
+            icon: Icon(Icons.home),
+            text: 'home',
+          ),
+          Tab(
+            icon: Icon(Icons.wifi),
+            text: 'spring boot',
+          ),
+          Tab(
+            icon: Icon(Icons.cloud),
+            text: 'spring cloud',
+          ),
+          Tab(
+            icon: Icon(Icons.web),
+            text: 'react',
+          ),
+          Tab(
+            icon: Icon(Icons.web_asset),
+            text: 'umi.js',
+          ),
+          Tab(
+            icon: Icon(Icons.phone_iphone),
+            text: 'H5',
+          ),
+          Tab(
+            icon: Icon(Icons.android),
+            text: 'flutter',
+          ),
+          Tab(
+            icon: Icon(Icons.style),
+            text: 'CSS3',
+          ),
+
+          Tab(
+            icon: Icon(Icons.catching_pokemon),
+            text: 'Spaces',
+          ),
+          Tab(
+            icon: Icon(Icons.beach_access_outlined),
+            text: 'Entertainment',
+          ),
         ],
       ),
     );

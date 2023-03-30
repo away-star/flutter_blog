@@ -49,7 +49,7 @@ class _PersonState extends State<Person> {
                   top: 30,
                   child: IconButton(
                     color: Colors.white,
-                    icon: Icon(Icons.keyboard_double_arrow_right, size: 30),
+                    icon: Icon(Icons.close, size: 30),
                     onPressed: () {
                       Navigator.pop(context);
                     },

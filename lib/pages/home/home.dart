@@ -7,6 +7,7 @@ import 'package:my_blog/pages/home/head.dart';
 import 'package:my_blog/pages/home/postList.dart';
 import 'package:my_blog/pages/home/slideShow.dart';
 import 'package:my_blog/services/homeAPI.dart';
+import 'package:my_blog/pages/home/essay.dart';
 import 'dart:math';
 
 class Home extends StatefulWidget {
@@ -140,6 +141,14 @@ while b < 10:
           slivers: [
             SlideShow(),
             PostList(posts: generatePosts()),
+          ],
+        ));
+        continue;
+      }
+      if (i >= _tags.length - 2) {
+        tabViews.add(CustomScrollView(
+          slivers: [
+            essayListPage(),
           ],
         ));
         continue;
