@@ -58,25 +58,92 @@ class essayListPage extends StatelessWidget {
                 Text(post.content),
 
                 // 随笔图片
-                GridView.builder(
-                  shrinkWrap: true,
-                  // 解决无限高度问题
-                  physics: ClampingScrollPhysics(),
-                  // 禁止滚动
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, // 每行最多显示 3 张图片
-                    mainAxisSpacing: 2,
-                    crossAxisSpacing: 2,
-                    // childAspectRatio: 1,
-                  ),
-                  itemCount: post.images.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Image.network(
-                      post.images[index],
+
+                if (post.images.length == 1)
+                  Center(
+                    child: Image.network(
+                      post.images[0],
                       fit: BoxFit.cover,
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                if (post.images.length == 2)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Image.network(
+                          post.images[0],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Image.network(
+                          post.images[1],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (post.images.length == 4)
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              post.images[0],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Image.network(
+                              post.images[1],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              post.images[2],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Image.network(
+                              post.images[3],
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                if (post.images.length == 3 || post.images.length > 4)
+                  GridView.builder(
+                    shrinkWrap: true,
+                    // 解决无限高度问题
+                    physics: ClampingScrollPhysics(),
+                    // 禁止滚动
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3, // 每行最多显示 3 张图片
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 2,
+                      // childAspectRatio: 1,
+                    ),
+                    itemCount: post.images.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.network(
+                        post.images[index],
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 Divider(
                   height: 32,
                   thickness: 2,
