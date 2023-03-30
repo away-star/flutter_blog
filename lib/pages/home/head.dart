@@ -146,11 +146,11 @@ class Head extends StatelessWidget {
           ),
 
           Tab(
-            icon: Icon(Icons.catching_pokemon),
+            icon: Icon(Icons.catching_pokemon, color: Colors.cyan,),
             text: 'Spaces',
           ),
           Tab(
-            icon: Icon(Icons.beach_access_outlined),
+            icon: Icon(Icons.beach_access_outlined, color: Colors.cyan,),
             text: 'Entertainment',
           ),
         ],
