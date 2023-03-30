@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_blog/pages/home/action.dart';
 import 'package:my_blog/pages/person/person.dart';
+import 'package:my_blog/pages/person/personlist.dart';
 
 class Head extends StatelessWidget {
   final tabController;
@@ -24,13 +25,7 @@ class Head extends StatelessWidget {
             transitionDuration: Duration(milliseconds: 200),
             pageBuilder: (BuildContext context, Animation<double> animation,
                     Animation<double> secondaryAnimation) =>
-                Person(
-              name: "xingxing",
-              email: "2064989403@qq.com",
-              signature:
-                  "So far all life is written with failure, but this does not prevent me from moving forward",
-              location: "China",
-            ),
+                personList(),
             transitionsBuilder: (BuildContext context,
                 Animation<double> animation,
                 Animation<double> secondaryAnimation,
@@ -114,7 +109,18 @@ class Head extends StatelessWidget {
         //标签
         tabs: [
           //将tags中的每个元素转换成一个Tab，并将它们组成列表
-          ...tags.map((tag) => Tab(text: tag)).toList(),
+          // ...tags.map((tag) => Tab(text: tag)).toList(),
+
+          Tab(text: 'home'),
+          Tab(text: 'spring boot'),
+          Tab(text: 'spring cloud'),
+          Tab(text: 'react'),
+          Tab(text: 'umi.js'),
+          Tab(text: 'H5'),
+          Tab(text: 'flutter'),
+          Tab(text: 'CSS3'),
+          Tab(text: 'Spaces'),
+          Tab(text: 'Entertainment'),
         ],
       ),
     );
