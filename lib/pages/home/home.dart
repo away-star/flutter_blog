@@ -59,8 +59,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       fake.add(Post(
         title: geneTitle(),
         content: geneContent(),
-        author: "author$i",
-        date: "date$i",
+        author: getAuthor(),
+        date: getDate(),
         tag: "${_tags[Random().nextInt(_tags.length)]}",
         image: Random().nextInt(10).toString(),
         //! 后面索引是10张图片，这里就用索引
@@ -126,19 +126,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           )
         ]
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          print(HomeAPI.getBaseData("SS"));
-          final data = await HomeAPI.getBaseData("");
-          print(data['data']['records'][5]['content']);
-          setState(() {
-            // posts = generatePosts();
-            // posts = data['data']['records'];
-          });
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

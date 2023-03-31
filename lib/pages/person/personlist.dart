@@ -38,7 +38,7 @@ class personList extends StatelessWidget {
               radius: 40,
             ),
             SizedBox(height: 10,),
-            Text('name',
+            Text('xingxing',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
             SizedBox(height: 10,),
             Divider(
