@@ -4,275 +4,878 @@ import 'package:my_blog/pages/home/essay.dart';
 
 List<String> contents = [
   """
-Getting Started
-First,download dependency
-```bash
-yarn
+---
+theme: condensed-night-purple
+---
+### 在springcloud alibaba中集成gateway
+##### 新建maven项目service-gateway并在pom文件中导入springcloud gateway依赖
+```pom
+      <!--gateway⽹关-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
 ```
-Second, run the development server:
+##### 加入nacos服务发现依赖和nacos服务注册中心适配
+```
+  <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
 
-```bash
-yarn start
+```
+#### 在bootstrap.yml配置文件中进行相关配置
+```
+server:
+  port: 9000
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          #让gateway可以发现nacos中的微服务
+          enabled: true
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+```
+`至此便完成了gateway路由的自动装配，通过访问9000端口完成请求的分发了`
+
+#### 启动nacos
+
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0db7976ddf4142b4a05ecd48a7b6425a~tplv-k3u1fbpfcp-watermark.image?)
+
+#### 书写测试接口controller
+```
+package com.example.servicecontent.controller;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author star
+ * @date 2023/1/28 12:05
+ */
+@Slf4j
+@RestController
+@CrossOrigin
+@RequestMapping("/content")
+@RefreshScope
+public class testController {
+
+    @GetMapping("/777")
+    public String post(){
+        return "77777777777777777777777777777777777";
+    }
+}
+
 ```
 
-## 项目介绍
 
-此项目为‘跨六端博客’的web前端，负责大屏、中大屏的web渲染展示，作为小屏端、Android、ios端flutter项目的互补项目，利用了大量的动画、交互、视觉效果，以及一些新的技术，使用户体验更加流畅，更加美观，更加人性化。
+#### 启动果然报错
 
-## 项目实现
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a0ab55d191e4893b9bcaafa315a1df9~tplv-k3u1fbpfcp-watermark.image?)
 
-### 技术选型与相关开发文档
+`好在全网搜寻找到了解决方案`
+原来是我继承了common工程，导致加入springweb依赖导致的报错，删除依赖，重新启动
 
-- web端渲染框架umi.js
-- 开发语言 Typescript
-- Git提交规范
-    - husky + commitizen
-- 代码规范及格式
-    - eslint + @antfu/eslint-config
-    - Prettier (未格式样式可使用Prettier 插件格式)
-- CSS
-    - 样式重置 normalize.css
-    - CSS 框架 less
-- 组件库
-    - And Design of React
-- 网络请求
-    - Axios
-    - umi-request
-- 其他三方库
-    - react-markdown -> markdown解析
-    - classnames -> 处理class
-    - javascript-time-ago -> 格式化时间
-    - less & less-loader & postcss-less -> 处理less
-    - lodash-es -> 工具函数库
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fdea8977ef2c48f98d4763dc4d23cf1c~tplv-k3u1fbpfcp-watermark.image?)
 
-### 架构设计
+#### 输入9000端口测试
 
-1. 规范制定：制定了一套统一的代码规范，并使用eslint等工具，以提高代码质量和协作效率
-2. 模块化：为了实现高内聚低耦合的设计原则并且提升协作效率，我们将业务分解为了多个独立的模块
-3. 多页面同时需要的组件放入components下的一级文件夹(例如: components/Author, components/banner以及components/common下
-   实现复用)
-4. 页面组件下的组件放在以以页面为名称的文件夹下保证可扩展性
-    1. 使用命名空间导出,确保可读性
-5. 布局统一放在 /components/layout下以保证复用性
-6. 组件拆分及管理：针对已划分的各个不同模块，我们进一步的对每一个模块进行了拆分，并且将可复用的 UI 元素封装为组件
+`再次报错`
 
-### 项目代码介绍
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ebae6d3d76134b379ceb363b3990a745~tplv-k3u1fbpfcp-watermark.image?)
+这下我发现了nacos的问题，springcloud gateway竟然在public分支里面，我的其他服务都在blog分支
 
-```angular2html
-juejin_by_sos-team
-├── README.md
-├── .husky
-├── .editorconfig
-├── .eslintrc.json
-├── commitlint.config.js
-├── declaration.d.ts
-├── package-lock.json
-├── package.json
-├── public
-│   ├── font               # 静态字体资源
-├── config                 # umi配置（路由、代理等）
-├── src
-│   ├── assets               # 静态资源
-│   ├── components           # 通用业务组件
-│   ├── layout               # 布局
-│   ├── pages                # 页面模版
-│   ├── services             # 接口
-│   ├── models               # redux状态管理
-│   └── utils                # 工具库
-│   └── constants            # 常量
-│   └── wrappers             # 权限校验
-└── tsconfig.json
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c8a1592d97d436d8672a923953cc1eb~tplv-k3u1fbpfcp-watermark.image?)
+`修改bootstrap.yml文件后再次启动 -------successful`
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/93c610f606114b4dab71a3c650e0db31~tplv-k3u1fbpfcp-watermark.image?)
+
+### springcloud gateway自定义配置详解
+
+`如果想要自定义路由加载的话会用到以下参数`
+
+- id，路由标识符，区别于其他 Route。
+- uri，路由指向的⽬的地 uri，即客户端请求最终被转发到的微服务。
+- order，⽤于多个 Route 之间的排序，数值越⼩排序越靠前，匹配优先级越⾼。
+- predicate，断⾔的作⽤是进⾏条件判断，只有断⾔都返回真，才会真正的执⾏路由。
+- filter，过滤器⽤于修改请求和响应信息。
+
+
+### 全网爆火的gateway执行流程图
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9fe328565ae6486380181f8fb3d8c62c~tplv-k3u1fbpfcp-watermark.image?)
+
+#### 其实还有一小部分gateway中的拦截器设置，俺觉得没啥必要不如去微服务中配酒不过多阐述啦
+
+
+  """,
+
+
+  """
+---
+theme: nico
+---
+### spring-cloud-starter-oauth2+securit简介
+
+##### 认证
+
+- 用户认证就是判断一个用户的身份是否合法的过程，用户去访问系统资源时系统要求验证用户的身份信 息，身份合法方可继续访问，不合法则拒绝访问。常见的用户身份认证方式有：用户名密码登录，二维 码登录，手机短信登录，指纹认证等方式。
+
+`认证是为了保护系统的隐私数据与资源，用户的身份合法方可访问该系统的资源。`
+#### 授权
+- 授权是用户认证通过后，根据用户的权限来控制用户访问资源的过程，拥有资源的访问权限则正常访 问，没有权限则拒绝访问。
+
+`认证是为了保证用户身份的合法性，授权则是为了更细粒度的对隐私数据进行划分，授权是在认证通过 后发生的， 控制不同的用户能够访问不同的资源。`
+
+#### RBAC模型
+`主体 -》 角色 -》 资源 -》行为`
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f2606eb94497441fb84648424a748d5e~tplv-k3u1fbpfcp-watermark.image?)
+### spring-cloud-starter-oauth2+security使用
+
+#### 相关依赖引入
+- spring-cloud-starter-oauth2+security是一套完整的用户登录授权系统，在认证服务上主要有三个依赖：`spring-cloud-starter-security、spring-cloud-starter-oauth2、spring-security-jwt`
 ```
+
+        <!--spring security相关依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+  <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>1.1.1.RELEASE</version>
+        </dependency>
+
+```
+- 在其他需要权限访问的服务上主要包含两个依赖：
+
+```
+  <!--spring security相关依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+```
+
+#### 认证服务搭建
+- 这里主要做security和oauth2的相关配置
+- 主要由以下四个配置文件
+
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/64fdb305f8934f128f141085735d9945~tplv-k3u1fbpfcp-watermark.image?)
+
+- WebSecurityConfig主要做springsecurity相关的配置
+```
+@EnableWebSecurity //开启security服务
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) //允许在方法上加的注解来配置权限
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    DaoAuthenticationProviderCustom daoAuthenticationProviderCustom;
+
+    //使用自己定义DaoAuthenticationProviderCustom来代替框架的DaoAuthenticationProvider
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProviderCustom);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        //密码为明文方式
+        return NoOpPasswordEncoder.getInstance();
+        //return new BCryptPasswordEncoder();
+    }
+
+    //配置安全拦截机制
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/pow/**").authenticated()//访问/r开始的请求需要认证通过
+                .anyRequest().permitAll()//其它请求全部放行
+                .and()
+                .formLogin().successForwardUrl("/login-success");//登录成功跳转到/login-success
+        http.logout().logoutUrl("/logout");//退出地址
+    }
+
+}
+
+```
+- TokenConfig在认证服务中主要作token的生成配置
+
+```
+@Configuration
+public class TokenConfig {
+
+    private String SIGNING_KEY = "030321liuxinyu";//和其他服务一致来解析token
+
+    @Autowired
+    TokenStore tokenStore;
+
+//    @Bean
+//    public TokenStore tokenStore() {
+//        //使用内存存储令牌（普通令牌）
+//        return new InMemoryTokenStore();
+//    }
+
+    @Autowired
+    private JwtAccessTokenConverter accessTokenConverter;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(SIGNING_KEY);
+        return converter;
+    }
+
+    //令牌管理服务
+    @Bean(name="authorizationServerTokenServicesCustom")
+    public AuthorizationServerTokenServices tokenService() {
+        DefaultTokenServices service=new DefaultTokenServices();
+        service.setSupportRefreshToken(true);//支持刷新令牌
+        service.setTokenStore(tokenStore);//令牌存储策略
+
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(accessTokenConverter));
+        service.setTokenEnhancer(tokenEnhancerChain);
+
+        service.setAccessTokenValiditySeconds(7200); // 令牌默认有效期2小时
+        service.setRefreshTokenValiditySeconds(259200); // 刷新令牌默认有效期3天
+        return service;
+    }}
+```
+
+- AuthorizationServer主要是授权方面也就是spring-cloud-starter-oauth2相关的配置
+
+```
+@Configuration
+@EnableAuthorizationServer
+@Slf4j
+public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
+
+
+    @Resource(name = "authorizationServerTokenServicesCustom")
+    private AuthorizationServerTokenServices authorizationServerTokenServices;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    //客户端详情服务
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients)
+            throws Exception {
+
+        clients.inMemory()// 使用in-memory存储
+                .withClient("starBlog")// client_id
+                .secret("030321liuxinyu")//客户端密钥
+//                .secret(new BCryptPasswordEncoder().encode("XcWebApp"))//客户端密钥
+                .resourceIds("starBlog")//资源列表
+
+                .authorizedGrantTypes("authorization_code", "client_credentials", "implicit", "refresh_token", "password")// 该client允许的授权类型authorization_code,password,refresh_token,implicit,client_credentials
+                .scopes("all")// 允许的授权范围
+                .autoApprove(false)//false跳转到授权页面
+                //客户端接收授权码的重定向地址
+                .redirectUris("http://www.xuecheng-plus.com")
+        ;
+    }
+
+
+    //令牌端点的访问配置
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints
+                .authenticationManager(authenticationManager)//认证管理器
+                .tokenServices(authorizationServerTokenServices)//令牌管理服务
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+    }
+
+    //令牌端点的安全配置
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        security
+                .tokenKeyAccess("permitAll()")                    //oauth/token_key是公开
+                .checkTokenAccess("permitAll()")                  //oauth/check_token公开
+                .allowFormAuthenticationForClients()                //表单认证（申请令牌）
+        ;
+    }
+
+}
+```
+- DaoAuthenticationProviderCustom是一个很重要的配置，通过这个修改的springsecuritu原先提供的登录方案（账号密码登录），但当前环境肯定涉及到多种登录方式，我们通过重写`additionalAuthenticationChecks和setUserDetailsService`方法来自定义登录方式
+
+```
+@Slf4j
+@Component
+public class DaoAuthenticationProviderCustom extends DaoAuthenticationProvider {
+
+ @Autowired
+ public void setUserDetailsService(UserDetailsService userDetailsService) {
+  super.setUserDetailsService(userDetailsService);
+ }
+
+
+ //不再校验密码
+ protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+
+ }
+
+
+}
+
+```
+
+- 至此认证服务的相关配置就完成啦，我们可以通过`POST localhost:8081/oauth/token?client_id=starBlog&client_secret=030321liuxinyu&grant_type=password&username={"account":"账号","authType":"登录方式","password":"密码"}`来进行测试
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cf8661a32e914bee9e24ed8e7105e399~tplv-k3u1fbpfcp-watermark.image?)
+
+这就是前端用户点击登录后获得的信息，然后将该token存储在本地，用户每次访问的时候都携带token即可，
+
+- oauth也提供了校验token的方法`POST localhost:8081/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ7XCJpZFwiOjE2MTY1MTYxNjUsXCJwaG9uZVwiOlwiMTM2NDg4MzcwOTNcIixcIkVtYWlsXCI6XCIyMDY0OTg5NDAzQHFxLmNvbVwiLFwiYWNjb3VudFwiOlwiMjA2NDk4OTQwM1wifSIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2NzUyNTI3MjIsImF1dGhvcml0aWVzIjpbInRlc3QiXSwianRpIjoiMDU1MjBlOTYtMTVhOS00MjAzLWExMWItNjRjZTNhNDQ5ZTM4IiwiY2xpZW50X2lkIjoic3RhckJsb2cifQ.I6wM4jZJdSA07gTnzmlP59vzqvm1hxNcNt3ejE0mR8w`
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2343a98e4ad64ee3a756ae144869cc7a~tplv-k3u1fbpfcp-watermark.image?)
+
+#### 资源服务搭建
+- 引入配置文件，相比于认证服务，资源服务的配置量少很多，主要有以下两个配置文件
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/27ad3d5c189a4243beae77449c746b46~tplv-k3u1fbpfcp-watermark.image?)
+- TokenConfig(和认证服务的类似，但不需要token生成)
+
+```
+@Configuration
+public class TokenConfig {
+
+    String SIGNING_KEY = "key";
+
+
+    @Autowired
+    private JwtAccessTokenConverter accessTokenConverter;
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        converter.setSigningKey(SIGNING_KEY);
+        return converter;
+    }
+}
+
+```
+
+- ResouceServerConfig（资源权限的相关配置）
+```
+@Configuration
+@EnableResourceServer
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+public class ResouceServerConfig extends ResourceServerConfigurerAdapter {
+
+
+    //资源服务标识
+    public static final String RESOURCE_ID = "starBlog";
+
+    @Autowired
+    TokenStore tokenStore;
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.resourceId(RESOURCE_ID)//资源 id
+                .tokenStore(tokenStore)
+                .stateless(true);
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers( "/**").authenticated()//所有/r/**的请求必须认证通过
+                .anyRequest().permitAll()
+        ;
+    }
+
+}
+```
+
+- 这样资源服务就搭建好了，我们访问资源
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e8d6f8c7a3704bfaa38e9523ae869698~tplv-k3u1fbpfcp-watermark.image?)
+
+- 在资源服务的方法上添加`@PreAuthorize("hasAuthority('test')")`可以指定拥有某项权限的用户才可以访问
+
+
+
+> 这样一个简单的spring-cloud-starter-oauth2+securit+jwt微服务就搭建完成了 
   """,
 
   """
-引言
-3月份chatGPT是不安分的、微软是不安分的、那么勇哥就应该安分？不可能，绝对不可能。简单来说，勇哥3月份成功的把chatGPT3.5集成到bg-tinkle软件中发布了v1.0.5版本。集成后的bg-tinkle对于数据库的修改、统计、删除等操作就都是一句话的事了，非常NICE。
+---
+theme: orange
+---
 
-阅读本文你会了解3月份chatGPT重大的事件，体验如何使用AI帮助数据库优化、设计SQL等操作？以及了解本功能开发实现的思路？
+# nexj.js特点
 
-事件回顾：不安分的3月大事
-chatGPT竞品出现：（谷歌的）Bard、（百度的）文心一言
+#### 服务端渲染/客户端渲染/同构渲染的优缺点
 
-chatGPT发布新版：chatGPT4隆重发布（但是勇哥并不CARE，因为太贵和没资格）
+- 首屏等待
 
-chatGPT成品出现：微软office正式接入chatGPT，写好word、ppt、excel再也不用报班学习了（但是价格不便宜呀~）
+在 SPA 模式下，所有的数据请求和 Dom 渲染都在浏览器端完成，所以当我们第一次访问页面的时候很可能会存在“白屏”等待，而服务端渲染所有数据请求和 html内容已在服务端处理完成，浏览器收到的是完整的 html 内容，可以更快的看到渲染内容，在服务端完成数据请求肯定是要比在浏览器端效率要高的多。
 
-数据库+AI：功能体验
-AI功能是以聊天的方式进行，然后对聊天的结果可直接执行SQL、制作图表得操作。
+- SEO 优化
 
-通过数据库软件，直接获取数据库表结构，然后再此基础上可用让AI帮您设计统计分析、修改、优化等，并直接生成SQL语句。然后可在结果中一键执行SQL、或者生成SQL的统计图。
+有些网站的流量来源主要还是靠搜索引擎，所以网站的 SEO 还是很重要的，而 SPA 模式对搜索引擎不够友好，要想彻底解决这个问题只能采用服务端直出。
 
+##### 服务端渲染优点
+- 前端渲染时间。因为后端拼接htm，浏览器只需直接渲染出来。
+- 有利于SEO。服务端有完整的html页面，所以爬虫更容易获得信息，更利于seo
+- 无需占用客户端资源，模板解析由后端完成，客户端只需解析标准的html页面，这样对客户端的资源占用更少，尤其是移动端，可以更加省电。
+- 后端生成静态化文件。即生成缓存片段，这样就可以减少数据库查询浪费的时间了，且对于数据变化不大的页面非常高效 等。
 
-AI补全表注释
-忘记写注释也不用怕，一键让AI补充+一键运行，10秒不到完成工作！大赞~
-
-
-AI设计表索引
-可以发送表常用的SQL语句，然后让其设计合理的索引。其设计的索引还挺符合行业规范的。大赞~
-
-
-AI创建新表
-依据现有的数据库，参考设计一张新的表。分成多次会话沟通，依然没有问题。
-
-  """,
+##### 服务端渲染缺点
+- 不利于前后端分离，开发效率很低
+- 占用服务器端资源。请求过多对服务器压力很大。
+- 即使局部页面发生变化也需要重新请求整个页面，费流量等。
 
 
-  """
- 1.数据归约
-在实际应用中,数据仓库可能存有海量数据,在全部数据上进行复杂的数据分析和挖掘工作所消耗的时间和空间成本巨大,这就催生了对数据进行归约的需求。
+#### next.js 项目搭建
+- 先上图，next.js渲染流程
 
-数据归约可以从几个方面入手:
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7304e8d0a152439ab09b0f36333b5696~tplv-k3u1fbpfcp-watermark.image?)
 
-如果对数据的每个维度的物理意义很清楚,就可以舍弃某些无用的维度,并使用平均值、汇总和计数等方式来进行聚合表示，这种方式称为数据立方体聚合;
-如果数据只有有些维度对数据挖掘有益，就可以去除不重要的维度,保留对挖掘有帮助的维度,这种方式称为维度归约;如果数据具有潜在的相关性,那么数据实际的维度可能并不高，可以用变换的方式,用低维的数据对高维数据进行近似的表示，这种方式称为数据压缩;
-另外一种处理数据相关性的方式是将数据表示为不同的形式来减小数据量,如聚类、回归等,这种方式称为数据块消减。
+- 使用next.js官方脚手架快速生成next.js项目
 
+> npm init next-app nextjs-blog --example "https://github.com/vercel/next-learn-starter/tree/master/learn-starter"
 
-归约后：
+此时使用`yarn dev`就可以迅速启动项目啦
 
 
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1b86b8bb88c7479ebeddb9bbb6ecf393~tplv-k3u1fbpfcp-watermark.image?)
 
-1.1数据立方体聚合
-数据立方体是一种数据表示和分析的工具,它将数据表示为多维的矩阵,可以对数据进行聚合运算如计数、求和和求平均值等操作。
+- next.js初探----页面跳转link
 
-1.2特征选择
-特征选择在数据预处理和迭代调整的学习中都有较多的使用，目的是对于给定数据挖掘任务,选择效果较好的较小特征集合。
+```
+import Link from 'next/link'
 
-在预处理中，特征选择通常希望能使得在选择出的特征集合下的类别的概率分布能够尽量接近于在全部特征下的类别的概率分布，这是为了权衡空间复杂度、时间复杂度和数据挖掘效果的折中。
+<Link href="/test">
+   <span>test`1</span>
+   <span>test`2</span>
+ </Link>
+```
+- next.js初探----页面跳转router
+```
+import Router from 'next/router'
+<button onClick={()=>{Router.push('/test')}}>去test页面</button>
+```
 
-在原始的特征有N维的情况下,特征子集的可能情况有2^N种情形
+- next.js初探----接收页面跳转传入参数
+```
 
-简单随机采样（SAS）
-随机地从所有N个数据中抽取M个数据,简单随机采样分为有放回的简单随机采样(SRSWR)和无放回的简单随机采样(SRSWOR),两者的差别在于从总体数据中拿出一个数据后,是否将这个数据放回。
+import { withRouter } from 'next/router'
+import Link from 'next/link'
 
-2.数据离散化
-计算机存储器无法存储无限精度的值，计算机处理器也不能对无限精度的数进行处理，因此在数据预处理中需要进行数据的离散化。另外，某些数据挖掘方法需要离散值的属性，这也催生了对数据进行离散化的需要。
+const  Test = ({router}) =>{
+    return(
+        <div>
+            <p>{router.query.id}</p>
+            <Link href={{pathname:'/'}}>
+                <span>回首页</span>
+            </Link>
+        </div>
+    )
+}
+export default withRouter(Test)
 
-通常每种方法都假定待离散化的值已经控递增序排序
+```
 
-2.1基于信息增益的离散化
-在进行数据离散化的过程中，如果关注点主要在于属性值的离散化能够有助于提高分类的准确性，那么可以使用信息增益来进行数据离散化。这种离散化方法是一种自顶向下的拆分方法。
+- next.js初探----路由钩子
 
-2.2基于卡方检验的离散化
-卡方检验是通过两个变量的联合分布来衡量它们是否独立的一种统计工具。在数据离散化中也可以引入这种思想，对于一个属性的两个相邻的取值区间，“属性值处于哪一个的区间”与“数据属于哪一个类别”这两个变量的独立性可以表明是否应该合并两个区间。如果两个变量独立，那么属性值在哪个区间是不影响分类的，意味着这两个区间可以合并。因此可以提出如下自底向上的区间合并算法来对数据进行离散化：每次寻找相关性最小的两个相邻区间进行合并，循环运行直到停止条件。
+```
+// 监听
+Router.events.on('routeChangeStart', handleRouteChange)
+// 关闭
+Router.events.off('routeChangeStart', handleRouteChange)
 
-2.3基于自然分区的离散化
-在实际问题中有时也会采用一些经验性的方法，如自然分区法，即3-4-5规则。这种方法将数值型的数据分成相对规整的自然分区。
+ Router.events.on('routeChangeStart',(...args)=>{
+   console.log('路由开始变化',...args)
+})
 
-规则如下：
+Router.events.on('routeChangeComplete',(...args)=>{
+  console.log('路由结束变化',...args)
+})
 
-(1)如果一个区间包含的不同值的数量的最高有效位是3，6，7或9，将该区间等宽地分为3个区间；
-(2)如果最高有效位是2，4或8，将该区间等宽地分为4个区间；
-(3)如果最高有效位是1，5或10，将该区间等宽地分为5个区间。
-3.概念层次生成
-由用户或专家在模式级显式地说明属性的偏序
-  """,
+Router.events.on('beforeHistoryChange,(...args)=>{
+  console.log('浏览器 history改变之前',...args)
+})
 
-  """
-  大致流程：问题分析（需求分析）,数据预处理（数据清洗，数据集成，数据归约），特征选择，模型选择（方案设计），模型求解，模型评估，模型解释，写成报告形式，展示。
-先撇开问题分析不说，数据预处理是数据分析挖掘最重要也是最基本的步骤。因为数据的质量往往能决定结果的质量。所以本篇先不谈各种数据挖掘算法，先做好数据预处理的基本功才是最重要的。
+Router.events.on('routeChangeError,(...args)=>{
+  console.log('跳转发生错误',...args)
+})
 
-只做总结，不作细说
+Router.events.on('hashChangeStart,(...args)=>{
+  console.log('hash模式路由改变刚开始',...args)
+})
 
-一、认识数据
-首先对数据进行一些基本的描述性统计分析。
-1.数据基本统计描述
-关于中心趋势度量：均值，中位数，众数，中列数
-给定一个属性，看他的值大部分落在何处。
-1.1均值：
-算术平均
-调和平均
-几何平均
-截尾平均（为抵消少数极端值的影响，放弃高低极端后的均值）
+Router.events.on('hashChangeComplete,(...args)=>{
+  console.log('hash模式路由改变结束',...args)
+})
+```
 
-1.2中位数
+#### next.js核心---getServerSideProps（老师推荐）
 
-1.3众数
+在初始渲染时就拿到数据，需要在页面组件处导出名为getServerSideProps的async函数，如果不需要接口数据做seo，也可以在页面加载后使用ajax请求
+```
+import { useRouter } from 'next/router'
 
-2.数据的散布（离散程度）
-2.1极差
-2.2四分位数
-2.3四分位极差
-四分位极差IQR：Q3-Q1（第3个四分位数-第1个四分位数），这个指标可以用于离群点的识别。识别可以的离群点的通常规则是，挑选落在第3个四分位数以上或第1个四分位数之下至少1.5*IOR处的值
-2.4五数概括
-2.5盒子图
-注意盒子图的画法：盒子图会有两个“胡须”，这两个胡须一般是数据集的最小值和最大值，中位数用盒内的线表示；仅当最高和最低观测值超过四分位数不到1.5*IQR时，胡须扩展到它们。否则，胡须在出现在1.5*IOR之内的最极端的观测值处终止。
-2.6方差
-2.7极差
+export async function getServerSideProps(context) {
+        // context为路由信息
+        const query = context.query
+        const id = query.id
+        const res = await apirequestxxx(id)
 
-3.简单数据可视化：
-有时候看图会比看变量的指标（如均值，极差）更快的了解数据的分布。下面介绍一些简单常见的统计图
-3.1直方图
-3.2饼图
-3.3线图
-3.4分位数图
-3.5分位数-分位数图
-3.6散点图
+  return {
+          // 信息可以在组件的props中拿到
+    props: {
+                        detailData: res.data
+                }
+  }
+}
 
-4如何度量数据的相似性和相异性
-簇：组内相似，组间相异
-4.1相似性度量
-标称属性：不匹配率（两个属性之间不匹配数目占所有属性数目的比例）
-二元属性：相异性分为对称的二元属性和非对称的二元属性，对于对称的而言，每个状态都是同等重要，故相异性的度量就是用两个的差别部分数目与总数目之比来表示，而非对称的，两个状态不是同等重要，两个取值为1的状态比两个取值为0的情况更急有意义。负匹配数被认为是不重要的，不考虑在分母内，其他一样。对非对称的二元属性，相似性就用1减去相异性即可，称为Jaccard系数。
+const NoData = ({detailData}) => {
+  return (
+    <div>
+      // ...
+    </div>
+  )
+}
 
-4.2数值属性的相异性度量：明氏距离，欧氏距离，曼哈顿距离，切比雪夫距离，马氏距离
-序数属性的邻近性度量（属性有顺序优劣之分）
-余弦相似性、Tanimoto距离
-适用于稀疏性的数据（有多个0）
+```
 
-二、数据预处理
-数据质量：准确性，完整性，一致性，时效性，可信性，可解释性
-上面介绍了一些初步了解数据的方法手段，下面总结下数据预处理。
-数据预处理主要分为四个步骤：数据清洗，数据集成，数据归约，数据变换
-直方图：单个值->单值桶。如何确定桶和属性值的划分？
-等宽：每个桶的宽度区间一致
-等频（等深）：使得每个桶的频率粗略的为常数（即每个桶大致包含相同个数的邻近数据样本）
-对于近似稀疏和稠密数据，以及高倾斜和均匀数据，直方图非常有效。对于存放具有高频率的离群点，单值桶是有用的
-聚类：簇和簇的质量的度量
-抽样：无放回简单随机抽样，有放回简单随机抽样，簇抽样，分层抽样
-4.数据变换：规范化，数据离散化和概念分层
-光滑：去掉数据中的噪声，分箱，回归，聚类
-属性构造：由给定的数据属性创建性的属性并添加到属性集中。
-聚集：对数据进行汇总或聚集
-规范化：把属性数据按比例缩放，使之落入一个特定的小区间。最小-最大规范化，z分位数规范化，按小数定标规范化
-分箱离散化：是一种基于指定的箱个数的自顶向下的分裂技术
+> 聊胜于无，感觉前后端分离开发才是大势所趋
   """,
 
   """
- 1.1 项目摘要  
-     传统办法管理信息首先需要花费的时间比较多，其次数据出错率比较高，而且对错误的数据进行更改也比较困难，最后，检索数据费事费力。因此，在计算机上安装网上商品订单转手系统软件来发挥其高效地信息处理的作用，可以规范信息管理流程，让管理工作可以系统化和程序化，同时，网上商品订单转手系统的有效运用可以帮助管理人员准确快速地处理信息。
+---
+theme: vue-pro
+highlight: solarized-light
+---
 
-     网上商品订单转手系统在对开发工具的选择上也很慎重，为了便于开发实现，选择的开发工具为idea，选择的数据库工具为Mysql。以此搭建开发环境实现网上商品订单转手系统的功能。其中管理员管理用户，新闻公告。
+> `At-rules`规则是目前CSS中一种常见的语法规则，它使用一个`"@"`符号加一个关键词定义，后面跟上语法区块，如果没有则以分号结束即可。  
+这种规则一般用于标识文档、引入外部样式、条件判断等等，本文是对该规则的使用总结。`
 
-     网上商品订单转手系统是一款运用软件开发技术设计实现的应用系统，在信息处理上可以达到快速的目的，不管是针对数据添加，数据维护和统计，以及数据查询等处理要求，网上商品订单转手系统都可以轻松应对。
+### @keyframes
+> 使用 `@keyframes` 可以创建动画。在动画过程中，您可以更改CSS样式的设定多次。指定的变化时发生时使用％，或关键字“from”和“to”，等价于0％到100％  0％是开头动画，100％是当动画完成。
 
-1.2 目的意义：
-       网上商品订单转手系统可以对网上商品订单转手系统信息进行集中管理，可以真正避免传统管理的缺陷。网上商品订单转手系统是一款运用软件开发技术设计实现的应用系统，在信息处理上可以达到快速的目的，不管是针对数据添加，数据维护和统计，以及数据查询等处理要求，网上商品订单转手系统都可以轻松应对。所以，网上商品订单转手系统的运用是让网上商品订单转手系统信息管理升级的最好方式。它可以实现信息处理的便利化要求，还可以规范信息处理的流程，让事务处理成为管理人员手中的一件简单事，而不是之前手工处理时的困难事。尽管网上商品订单转手系统具备较完善的功能，但是也需要管理人员利用闲暇时间提升自身素质以及个人能力，在操作网上商品订单转手系统时可以最大化运用网上商品订单转手系统提供的功能，让系统在满足高效率处理数据的同时，也能始终稳定运行，还可以确保数据的可靠性与数据处理的质量。
+##### 示例
+```
+ @keyframes mycolor {
+    0% { background-color: red; }
+    30% { background-color: darkblue; }
+    50% { background-color: yellow; }
+    70% { background-color: darkblue; }
+    100% { background-color: red; }
+  }
+```
 
-二、主要技术： 
-2.1  Spring Boot框架：
-        Spring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域(rapid application development)成为领导者。
+##### css样式名称
+- `animation-name`:动画的名称 用于指定一个@keyframes动画，指定要使用哪一个关键帧
+- `animation-name`:动画持续时间 用于定义动画完成一个周期要多少秒或者多少毫秒
+- animation-timing-function:动画的运动方式 指定动画将如何完成一个周期,有如下参数，通常不指定  默认ease
+```
+  ease;默认
+  ease-in;  
+  ease-out;
+  ease-in-out;
+  linear;
+  steps(数值, 定位) 定位：start/end 默认end指逐步运动
+```
+- animation-delay:动画在组件渲染后多久开始
+- animation-iteration-count:动画循环播放的次数，默认值为1，一般会设定为infinite（一直循环）
+- animation-fill-mode：动画在播放完成后的状态，有两个值可以选择
+```
+  forwards 保持动画结束后的状态(通常选择这个，防止抖动)
+  backwards 动画结束后回到最初的状态
+```
+- animation-direction:动画执行顺序----动画是否应该播放完后逆向交替循环（对设置了多次播放的动画有效），有三个值可供选择：
 
-SpringBoot基于Spring4.0设计，不仅继承了Spring框架原有的优秀特性，而且还通过简化配置来进一步简化了Spring应用的整个搭建和开发过程。另外SpringBoot通过集成大量的框架使得依赖包的版本冲突，以及引用的不稳定性等问题得到了很好的解决。
+```
+ normal 默认值（即执行完后回到起点再次执行）
+ reverse 反向（即直接从终点反向执行到起点再反复）
+ alternate 先从起点到终点，再从终点到起点
+```
 
-2.2 Tomcat：
-        刚开始学习Java语言的时候，是不知道还有Tomcat这些东西的，各种语法各种输出在控制台进行输出结果，当Java网站开发的时候就不可避免的学习到了Tomcat服务器。Tomcat准确的来讲不算是服务器，可以说是vue引擎或者一个容器，这些都是学术上或者原理上都比较贴切的，但是实际工作中Tomcat就是作为一个web服务器来用的，因为可以实现网站的发布和运行。因为工作原理的原因，Tomcat一般作为中小型企业和并发量并不突出的一种轻量级的服务器存在的，比如某些行业的应用系统，本身客户端就不多，需要的连接也不多，一般都用Tomcat的。Tomcat里面可以配置多个网站，配置文件后缀是config的文档，类似于XML的结构，比较清晰明了。每当Java发布新的版本的时候，Tomcat也会为了匹配Java的版本进行升级，目前Tomcat版本已经到版本10了。Tomcat标识是一只有点发黄的小猫咪，当Tomcat配置成功一般测试的时候能看到这个小猫咪就算是成功的，才能进行下一步的配置。Tomcat服务器在Java网站开发中还是挺合适的。
+**以上所有css样式可以简写为:**
+`animation: 动画执行时间 延迟时间 执行关键帧名称 运动方式 运动次数 结束状态 动画执行顺序`;
+**更简形式为:**
+``animation: 动画执行时间 执行关键帧名称;``
 
-2.3 Springboot
-   Java一直被人诟病的一点就是臃肿、麻烦。当我们还在辛苦的搭建项目时，可能Python程序员已经把功能写好了，究其原因注意是两点：复杂的配置，项目各种配置其实是开发时的损耗， 因为在思考 Spring 特性配置和解决业务问题之间需要进行思维切换，所以写配置挤占了写应用程序逻辑的时间。一个是混乱的依赖管理。项目的依赖管理也是件吃力不讨好的事情。决定项目里要用哪些库就已经够让人头痛的了，你还要知道这些库的哪个版本和其他库不会有冲突，这难题实在太棘手。并且，依赖管理也是一种损耗，添加依赖不是写应用程序代码。一旦选错了依赖的版本，随之而来的不兼容问题毫无疑问会是生产力杀手。而SpringBoot让这一切成为过去！Spring Boot 简化了基于Spring的应用开发，只需要“run”就能创建一个独立的、生产级别的Spring应用。Spring Boot为Spring平台及第三方库提供开箱即用的设置（提供默认设置，存放默认配置的包就是启动器），这样我们就可以简单的开始。多数Spring Boot应用只需要很少的Spring配置。我们可以使用SpringBoot创建java应用，并使用Java–jar 启动它，就能得到一个生产级别的web工程
+##### 简单应用
+```
+div { 
+        width: 200px;
+        height: 200px;
+        background: red;
+}
+@keyframes mycolor {
+        0% { background-color: red; }
+        30% { background-color: yellow; }
+        60% { background-color: green; }
+        100% { background-color: red; }
+}
+div:hover {
+        animation-name: mycolor;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-iteration-count: 2;
+}
+```
+##### 注意事项
+`@keyframes的原理是把元素样式从一个状态慢慢的变为另外一个状态，所以是要能够进行渐变的样式才可以使用`
+以下是不能生效的
+```
+div {
+    animation: appear 2s;
+}
+@keyframes appear {
+    from { display:none; }
+    to   { display:block;}
+}
+```
+`常用于@keyframes的属性介绍`
+- visibility和opacity
+- color和background-color
+- 盒子模型中的margin、pading、bottom、top、border
 
-三、系统设计：
-3.1 系统功能设计：
-网上商品订单转手系统主要功能设计：
+想到了再补充其他的
 
-主要角色：用户 商家 管理员
+### @media
+> 使用 @media，可以针对不同的媒体类型定义不同的样式。
+> 使用 @media， 可以针对不同的屏幕尺寸设置不同的样式
+> 当你重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面。
 
-主要功能设计：用户登录、注册、修改密码、首页信息展示、系统轮播图  、模糊搜索、收藏、商品点击数量统计、评论、收藏、富文本图文上传、文件上传、商家管理、用户余额充值等
+##### 简单示例子
+```
+@media mediatype and|not|only (media feature) {
+    CSS-Code;
+}
+```
+##### 媒体类型
+-   all 【默认值】 匹配所有设备，无论是打印设备还是其他普通的现实设备。
+-   screen 除打印设备和屏幕阅读设备以外的所有设备
+-   speech 能够“读出”页面的屏幕阅读设备，通常供残疾人士使用
+-   print 在打印和打印预览的时候生效
 
-商品管理（订单、商品评论、回复、商品统计报表、接单、转单、发货、收货、退货等）
+`此处一般情况下不写，采用默认值all，当前我们设计的前端项目一般不涉及speech、print、screen的区分`
 
-公告信息、加上一些基本业务功能的添加修改删除操作等
+##### 媒体特征（常用）
+- 判断设备是横屏还是竖屏
+```
+/* 横屏 */ 
+@media (orientation: landscape) {} 
+/* 竖屏 */ 
+@media (orientation: portrait) {}
+
+```
+- 匹配设备的最大高度、最大宽度
+```
+/* 如果高度小于600px */ 
+@media (max-height: 600px) {}
+/* 如果高度小于480px */ 
+@media (max-height: 480px) {}
+
+/*多重判断可以用or或者and*/
+@media(min-height: 100px) and (max-height: 200px){
+  body { background: #333; color: white; }
+}
+
+```
+- 判断深色模式
+```
+
+/* 深色模式 表示系统更倾向于深色模式*/
+@media (prefers-color-scheme: dark) {
+    body { background: #333; color: white; }
+}
+/* 浅色模式 表示系统更倾向于浅色模式*/
+@media (prefers-color-scheme: light) {
+    body { background: white; color: #333; }
+}
+
+```
+
+##### 匹配规则
+
+`从前往后，一旦匹配则终止`
+
+### @import
+> 用于导入其他样式文件
+
+- 可以混用条件判断媒体查询
+```
+/* 宽度小于1000px才会生效 */
+@import "./reset.css" screen and (max-width: 1000px); 
+
+```
+
+### @font-face
+> @font-face 用于加载自定义字体。属于目前前端比较常用的语法，也有多开源的字体图标库可以使用既支持提供字体资源文件路径进行加载，也支持用户本地安装的字体加载
+
+阿里开源字体库引用 示例
+- 引入ttf文件
+
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8ee75ec43ce049f9b67eb90a76cd5997~tplv-k3u1fbpfcp-watermark.image?)
+- font.css
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/74729ed2c9c6434ea2f1f3be157d383f~tplv-k3u1fbpfcp-watermark.image?)
+
+- global.less中引入
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9a2991987be74e94bc56da6126203b2e~tplv-k3u1fbpfcp-watermark.image?)
+
+  """,
+
+  """
+
+
+## 伪类
+- 伪类存在的意义是为了通过选择器找到那些 ①不存在于DOM树中的信息 以及 ②不能被常规CSS选择器获取到的信息
+- 伪类由一个冒号 : 开头，冒号后面是伪类的名称和包含在圆括号的可选参数。
+- 任何常规选择器都可以在任何位置使用伪类。
+- 一些伪类的作用会互斥，另外一些伪类可以同时被同一个元素使用。并且为了满足用户在操作DOM时产生的DOM结构改变，伪类也可以是动态的。
+
+#### 常用伪类
+伪类              | 中文释义 | 用法             |
+| --------------- | ---- | -------------- |
+| **a:link{}**    | 链接   | 在超链接点击之前       |
+| **a:visited{}** | 访问过的 | 在超链接点击之后       |
+| **a:hover{}**   | 悬停   | 鼠标放到超链接上的时候    |
+| **a:active{}**  | 活跃   | 鼠标点击超链接且不松手的时候 |
+
+```
+    <p>
+        <a href="#" class="active">链接</a>
+    </p>
+    
+.active:link{           /* 点击前 */
+    color: orange;
+}
+.active:visited{        /* 点击后 */
+    color: purple;
+}
+.active:hover{          /* 悬停时 */
+    color: red;
+}
+.active:active{
+    color: teal;        /* 点击不松开时 */
+}
+```
+##### `:nth-child()`，`nth-of-type()`·
+    `两者用法类似`，均表示第几个该元素
+    
+## 伪元素
+    
+##### `::after` 和 `::before`
+- ::before和::after是什么?
+
+::before和::after可以添加到选择器以创建伪元素的关键字。伪元素被插入到与选择器匹配的元素内容之前或之后。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9ab8ab45dcc0480f9afc6c12e0f5c787~tplv-k3u1fbpfcp-watermark.image?)
+- content属性
+1. ::before和::after下特有的content，用于在css渲染中向元素逻辑上的头部或尾部添加内容。
+2. ::before和::after必须配合content属性来使用，content用来定义插入的内容，content必须有值，至少是空
+3. 这些添加不会出现在DOM中，不会改变文档内容，不可复制，仅仅是在css渲染层加入。所以不要用:before或:after展示有实际意义的内容，尽量使用它们显示修饰性内容
+
+- content取值
+
+1. string（使用引号包一段字符串，将会向元素内容中添加字符串）
+
+```
+ p::before{
+    content: "《";
+    color: #000000;
+}
+p::after{
+    content: "》";
+    color:#000000;
+}
+
+```
+2. attr() ------通过attr()调用当前元素的属性，比如图片alt提示文字或者链接的href地址显示
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b9ab6e91405d4d38bf73f70881e3872e~tplv-k3u1fbpfcp-watermark.image?)
+
+3. url()/uri() ----------用于引用媒体文件。比如：“百度”前面给出一张图片，后面给出href属性。
+
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c847d9aa82d4333bcda0e79e3e304f0~tplv-k3u1fbpfcp-watermark.image?)\
+
+- content注意事项
+
+1. URL不能使用引号。如果你将URL用引号括起来，那么它会变成一个字符串和插入文本“url(image.jpg)”作为其内容，插入的而不是图像本身。
+2. content属性，直接使用图片，即使写width,height也无法改变图片大小;
+
+*解决方案：如果要解决这个问题，可以把content:''写成空，使用background:url()来添加图片*
+
+```
+/*伪元素添加图片：*/
+.wrap:after{
+    /*内容置为空*/
+    content:"";
+    /*设置背景图，并拉伸*/
+    background:url("img/06.png") no-repeat center;
+    /*必须设置此伪元素display*/
+    display:inline-block;
+    /*必须设置此伪元素大小（不会被图片撑开）*/
+    background-size:100%;
+    width:100px;
+    height:100px;
+}
+```
+3. 苹果端伪元素不生效,img、input和其他的单标签是没有:after和:before伪元素的（在部分浏览器中没有，如:苹果端会发现无效），因为单标签本身不能有子元素。
+*解决方案：给img包一个div可以解决*
+
+
+## 参考表
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2b3dfd02d0ea41d79601aed439a4a344~tplv-k3u1fbpfcp-watermark.image?)
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f047d458fb5943fc8005c21a49286d68~tplv-k3u1fbpfcp-watermark.image?) 
   """
 ];
 
