@@ -73,6 +73,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return fake;
   }
 
+
   //! 生成tabView视图，这里除了首页调用的参数都是随机生成的
   List<Widget> generateTabViews() {
     List<Widget> tabViews = [];
