@@ -42,7 +42,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // posts = generatePosts(); //初始化生成数据
     // print(posts);
     print("我被执行了");
-
     _tabController = TabController(length: _tags.length, vsync: this);
   }
 

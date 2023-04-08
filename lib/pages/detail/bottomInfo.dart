@@ -19,10 +19,10 @@ class BottomInfo extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                launchUrlString(juejinAddr);
+                launchUrlString(Constants.juejinAddr);
               },
               child: Text(
-                juejinAddr,
+                Constants.juejinAddr,
                 style: TextStyle(fontSize: 12, color: Colors.blue[200]),
               ),
             ),
@@ -40,10 +40,10 @@ class BottomInfo extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                launchUrlString(csdnAddr);
+                launchUrlString(Constants.csdnAddr);
               },
               child: Text(
-                csdnAddr,
+                Constants.csdnAddr,
                 style: TextStyle(fontSize: 12, color: Colors.blue[200]),
               ),
             ),
@@ -61,7 +61,6 @@ class BottomInfo extends StatelessWidget {
           ),
         ],
       ),
-
     ]);
   }
 }
