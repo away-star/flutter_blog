@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+/*
+ * 服务端内容API接口（仅供参考未完成）
+ */
+
 class HomeAPI {
   static const String baseUrl = 'http://localhost:9000';
   //static const String baseUrl = 'https://your-api-url.com';

@@ -90,7 +90,7 @@ class Head extends StatelessWidget {
         onTap: (index) {
           print(index);
         },
-        labelStyle: TextStyle(fontSize: 16.0),
+        labelStyle: TextStyle(fontSize: 20.0),
         unselectedLabelStyle: TextStyle(fontSize: 11.0),
         //指示器大小
         indicatorSize: TabBarIndicatorSize.tab,
@@ -102,7 +102,6 @@ class Head extends StatelessWidget {
         isScrollable: true,
         //指示器颜色
         indicatorColor: Colors.blue,
-
         //选中标签的文本颜色
         labelColor: Colors.blue,
         //未选中标签的文本颜色
@@ -137,7 +136,7 @@ class Head extends StatelessWidget {
             text: 'H5',
           ),
           Tab(
-            icon: Icon(Icons.android),
+            icon: Icon(Icons.flutter_dash),
             text: 'flutter',
           ),
           Tab(

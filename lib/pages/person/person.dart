@@ -174,10 +174,10 @@ class _PersonState extends State<Person> {
                           onTap: () {
                             //打开网页
                             //launch(githubAddr);
-                            launchUrlString(githubAddr);
+                            launchUrlString( Constants.githubAddr);
                           },
                           child: Text(
-                            githubAddr,
+                            Constants.githubAddr,
                             style: TextStyle(
                               color: Colors.blue,
                             ),
