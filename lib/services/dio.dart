@@ -30,7 +30,6 @@
 // }
 
 import 'package:dio/dio.dart';
-
 import '../common/constants.dart';
 import 'apiInterceptor.dart';
 

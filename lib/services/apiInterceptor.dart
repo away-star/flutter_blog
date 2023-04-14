@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:html';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +13,7 @@ class ApiInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     if (kIsWeb) {
       // web端可以使用localStorage存储
-      options.headers['Authorization'] = window.localStorage['Authorization']??null;
+      //options.headers['Authorization'] = window.localStorage['Authorization']??null;
     } else {
       // 移动平台和桌面平台可以使用SharedPreferences存储
       SharedPreferences.getInstance().then((prefs) {
@@ -31,7 +30,7 @@ class ApiInterceptor extends Interceptor {
     if (response.headers.map['Authorization'] != null) {
       if (kIsWeb) {
         // web端可以使用localStorage存储
-        window.localStorage['Authorization'] = response.headers.map['Authorization']![0];
+        //window.localStorage['Authorization'] = response.headers.map['Authorization']![0];
       } else {
         // 移动平台和桌面平台可以使用SharedPreferences存储
         SharedPreferences.getInstance().then((prefs) {
