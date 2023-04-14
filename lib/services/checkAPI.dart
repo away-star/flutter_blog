@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:js';
 import 'package:dio/dio.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart' as http;
@@ -118,7 +117,6 @@ class CheckAPI {
         'password': password,
       },
     );
-    print(response.data);
     return response.data;
   }
 }

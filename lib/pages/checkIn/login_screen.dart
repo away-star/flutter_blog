@@ -1,7 +1,5 @@
-import 'dart:html' show window;
+// import 'dart:html' show window;
 import 'dart:math';
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
@@ -36,9 +34,9 @@ class LoginScreen extends StatelessWidget {
         print(response);
         String token = response['data']['access_token'];
         if (kIsWeb) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+          //SharedPreferences prefs = await SharedPreferences.getInstance();
           // web端可以使用localStorage存储
-          window.localStorage['Authorization'] = "Bearer "+token;
+           //window.localStorage['Authorization'] = "Bearer "+token;
         } else {
           // 移动平台和桌面平台可以使用SharedPreferences存储
           SharedPreferences prefs = await SharedPreferences.getInstance();

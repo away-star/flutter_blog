@@ -6,7 +6,6 @@ import 'package:my_blog/pages/home/home.dart';
 import 'package:my_blog/pages/person/person.dart';
 import 'package:my_blog/services/apiInterceptor.dart';
 import 'package:provider/provider.dart';
-
 import 'models/apiProvider.dart';
 
 void main() {
