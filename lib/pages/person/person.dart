@@ -5,6 +5,7 @@ import 'package:my_blog/common/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:my_blog/pages/detail/MyMD.dart';
+import 'package:my_blog/pages/person/person_edit.dart';
 
 class Person extends StatefulWidget {
   final tocContorllr = TocController();
@@ -39,7 +40,8 @@ class _PersonState extends State<Person> {
               clipBehavior: Clip.none,
               children: [
                 Image.network(
-                  'https://picsum.photos/id/1025/600/300',
+                  // 'https://picsum.photos/id/1025/600/300',
+                  "https://www.itying.com/images/flutter/1.png",
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 200,
@@ -90,13 +92,52 @@ class _PersonState extends State<Person> {
                     padding: const EdgeInsets.only(left: 80),
                     child: Text(
                       '${widget.name}',
+                      // "名字",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  //! 增加一个修改个人资料的按钮
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 1,
+                          color: Colors.grey[300],
+                        )
+                      ),
+
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => PersonEditPage()));
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.blue, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                          side: BorderSide(color: Colors.blue, width: 1),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.edit, size: 16),
+                            SizedBox(width: 4),
+                            Text(
+                              '编辑个人资料',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+
+                  // SizedBox(height: 20),
                   Row(
                     children: [
                       Icon(Icons.email_outlined,
@@ -174,7 +215,7 @@ class _PersonState extends State<Person> {
                           onTap: () {
                             //打开网页
                             //launch(githubAddr);
-                            launchUrlString( Constants.githubAddr);
+                            launchUrlString(Constants.githubAddr);
                           },
                           child: Text(
                             Constants.githubAddr,
