@@ -1029,7 +1029,7 @@ List<Post_essay> generatePost_essay(int count) {
     List<String> images = List.generate(randomImageCount,
             (index) => 'https://www.itying.com/images/flutter/${random.nextInt(6) + 1}.png');
     Post_essay post = Post_essay(
-      author: "作者 ${i + 1}",
+      mood: "happy",
       publishTime: "${2 * (i + 1) + random.nextInt(2)}小时前",
       content: geneEssay(),
       images: images,

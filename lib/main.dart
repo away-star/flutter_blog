@@ -90,7 +90,8 @@ class MyApp extends StatelessWidget {
             return null;
         }
       },
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: Home(),
     );
   }
 }

@@ -4,50 +4,67 @@ import 'package:my_blog/pages/person/person.dart';
 import 'package:my_blog/pages/person/personlist.dart';
 
 class Head extends StatelessWidget {
+  bool isUser = true;
   final tabController;
-
   final List<String> tags;
 
-  const Head({Key? key, required this.tabController, required this.tags})
+  Head(
+      {Key? key,
+      required this.tabController,
+      required this.tags,
+      required this.isUser})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    // 打印检查主页
+    // print(isUser);
+
     return SliverAppBar(
       floating: true,
       centerTitle: false,
       snap: true,
       backgroundColor: Colors.white,
 
-      leading: GestureDetector(
-        onTap: () {
-          var route = PageRouteBuilder(
-            transitionDuration: Duration(milliseconds: 200),
-            pageBuilder: (BuildContext context, Animation<double> animation,
-                    Animation<double> secondaryAnimation) =>
-                personList(),
-            transitionsBuilder: (BuildContext context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
-              return SlideTransition(
-                position:
-                    Tween<Offset>(begin: Offset(-1.0, 0.0), end: Offset.zero)
-                        .animate(animation),
-                child: child,
-              );
-            },
-          );
-          Navigator.push(context, route);
-        },
-        child: Container(
-          margin: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
-          child: CircleAvatar(
-            backgroundImage: AssetImage('assets/images/avatar.jpg'),
-            radius: 5,
-          ),
-        ),
-      ),
+      leading: this.isUser
+          ? GestureDetector(
+              onTap: () {
+                var route = PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 200),
+                  pageBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation) =>
+                      personList(),
+                  transitionsBuilder: (BuildContext context,
+                      Animation<double> animation,
+                      Animation<double> secondaryAnimation,
+                      Widget child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                              begin: Offset(-1.0, 0.0), end: Offset.zero)
+                          .animate(animation),
+                      child: child,
+                    );
+                  },
+                );
+                Navigator.push(context, route);
+              },
+              child: Container(
+                margin: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 10.0),
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                  radius: 5,
+                ),
+              ),
+            )
+          : IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+
       title: Container(
         height: 35,
         decoration: BoxDecoration(
@@ -76,7 +93,8 @@ class Head extends StatelessWidget {
           ],
         ),
       ),
-      actions: [MyAction()],
+
+      actions: isUser ? [MyAction()] : null,
       // flexibleSpace: Container(
       //   height: 100,
       //   decoration: BoxDecoration(
@@ -88,7 +106,9 @@ class Head extends StatelessWidget {
       // ),
       bottom: TabBar(
         onTap: (index) {
-          print(index);
+          if (index==8 || index==9) {
+            print('y');
+          }
         },
         labelStyle: TextStyle(fontSize: 20.0),
         unselectedLabelStyle: TextStyle(fontSize: 11.0),
@@ -145,11 +165,17 @@ class Head extends StatelessWidget {
           ),
 
           Tab(
-            icon: Icon(Icons.catching_pokemon, color: Colors.cyan,),
+            icon: Icon(
+              Icons.catching_pokemon,
+              color: Colors.cyan,
+            ),
             text: 'Spaces',
           ),
           Tab(
-            icon: Icon(Icons.beach_access_outlined, color: Colors.cyan,),
+            icon: Icon(
+              Icons.beach_access_outlined,
+              color: Colors.cyan,
+            ),
             text: 'Entertainment',
           ),
         ],

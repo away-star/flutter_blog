@@ -10,9 +10,12 @@ import 'package:my_blog/services/homeAPI.dart';
 import 'package:my_blog/pages/home/essay.dart';
 import 'dart:math';
 import 'package:my_blog/pages/home/data.dart';
+import 'package:my_blog/pages/write/wr_essay.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  bool check=true;
+
+  Home({Key? key, this.check=true}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -105,6 +108,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
+    // 打印检查主页
+    // print(widget.check);
+
     return Scaffold(
       // !原先单页的代码
       // body: CustomScrollView(
@@ -118,7 +125,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       //! 这里显示的滚动条下的页面，这里可以用head了
       body: CustomScrollView(
         slivers: [
-          Head(tabController: _tabController, tags: _tags),
+          Head(tabController: _tabController, tags: _tags, isUser: widget.check),
           SliverFillRemaining(
             child: TabBarView(
               controller: _tabController,
@@ -126,6 +133,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ),
           )
         ]
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 按钮被按下时执行的操作
+          print(_tabController.index);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WritePage()),
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
     );
   }
