@@ -52,13 +52,7 @@ class personList extends StatelessWidget {
                 // 点击事件处理
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) {
-                      return Person(
-                        name: "xingxing",
-                        email: "2064989403@qq.com",
-                        signature:
-                        "So far all life is written with failure, but this does not prevent me from moving forward",
-                        location: "China",
-                      );
+                    return Person();
                     }));
               },
               child: Align(

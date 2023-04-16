@@ -12,19 +12,23 @@ import 'dart:math';
 import 'package:my_blog/pages/home/data.dart';
 import 'package:my_blog/pages/write/wr_essay.dart';
 
-class Home extends StatefulWidget {
-  bool check=true;
+import '../../utils/APIUtil.dart';
 
-  Home({Key? key, this.check=true}) : super(key: key);
+class Home extends StatefulWidget {
+  bool check = true;
+
+  Home({Key? key, this.check = true}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  bool _isLoading = true;
+  Map<String, dynamic> _data = {};
   late TabController _tabController;
+  // late List<String> _tags;
 
-  int _currentIndex = 0;
   final List<String> _tags = [
     "home",
     "spring boot",
@@ -37,16 +41,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     "Music",
     "Entertainment"
   ];
-  late List<Post> posts;
 
   @override
   void initState() {
     super.initState();
+    fetchData();
     // posts = generatePosts(); //初始化生成数据
     // print(posts);
     print("我被执行了");
     _tabController = TabController(length: _tags.length, vsync: this);
   }
+
+  Future<String?> fetchData() async {
+    var res = await DioUtil().getUserIntialInfo();
+    setState(() {
+      _data = res;
+      _isLoading = false;
+      // _tags = _data['data']['loginInformationId']['labels'];
+      // print(_data['data']['loginInformationId']['labels']);
+    });
+    return "success";
+  }
+
+  int _currentIndex = 0;
+  late List<Post> posts;
 
   @override
   void dispose() {
@@ -74,7 +92,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     }
     return fake;
   }
-
 
   //! 生成tabView视图，这里除了首页调用的参数都是随机生成的
   List<Widget> generateTabViews() {
@@ -108,44 +125,51 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     // 打印检查主页
     // print(widget.check);
 
-    return Scaffold(
-      // !原先单页的代码
-      // body: CustomScrollView(
-      //
-      //   slivers: [
-      //     Head(tabController: _tabController, tags: _tags),
-      //     SlideShow(),
-      //     PostList(posts: this.posts),
-      //   ],
-      // ),
-      //! 这里显示的滚动条下的页面，这里可以用head了
-      body: CustomScrollView(
-        slivers: [
-          Head(tabController: _tabController, tags: _tags, isUser: widget.check),
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: _tabController,
-              children: generateTabViews(),
+    return _isLoading
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CircularProgressIndicator.adaptive(),
             ),
           )
-        ]
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // 按钮被按下时执行的操作
-          print(_tabController.index);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WritePage()),
+        : Scaffold(
+            // !原先单页的代码
+            // body: CustomScrollView(
+            //
+            //   slivers: [
+            //     Head(tabController: _tabController, tags: _tags),
+            //     SlideShow(),
+            //     PostList(posts: this.posts),
+            //   ],
+            // ),
+            //! 这里显示的滚动条下的页面，这里可以用head了
+            body: CustomScrollView(slivers: [
+              Head(
+                  tabController: _tabController,
+                  tags: _tags,
+                  isUser: widget.check),
+              SliverFillRemaining(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: generateTabViews(),
+                ),
+              )
+            ]),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                // 按钮被按下时执行的操作
+                print(_tabController.index);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WritePage()),
+                );
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.blue,
+            ),
           );
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-      ),
-    );
   }
 }

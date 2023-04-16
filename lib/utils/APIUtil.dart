@@ -2,6 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:my_blog/services/dio.dart';
 
 class DioUtil {
+  Future<dynamic> getUserIntialInfo() async {
+    Response response = await dio.get('/service-user/information/initial');
+    return response.data;
+  }
+
+
   //登录获取验证码
   Future<dynamic> getLoginCaptcha(String email) async {
     // 发送Get请求，并添加查询参数

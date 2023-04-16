@@ -52,7 +52,7 @@ class LoginScreen extends StatelessWidget {
   //滑动验证
   Future<bool> verifySlider(BuildContext context) async {
     // Generate a random number between 0 and 100
-    final int randomNumber = Random().nextInt(100);
+    final int randomNumber = Random().nextInt(10);
     // Show a dialog with a slider that goes from 0 to 100
     final result = await showDialog<int>(
       context: context,
