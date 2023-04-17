@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_blog/pages/person/login_page.dart';
 import 'package:my_blog/pages/person/person.dart';
+import 'package:my_blog/pages/person/person_edit.dart';
 
 class personList extends StatelessWidget {
   // final String text;
@@ -32,10 +33,19 @@ class personList extends StatelessWidget {
               ),
             ),
 
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/images/avatar.jpg'),
-              //这里设置的是半径
-              radius: 40,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PersonEditPage()));
+              },
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                //这里设置的是半径
+                radius: 40,
+              ),
             ),
             SizedBox(height: 10,),
             Text('xingxing',

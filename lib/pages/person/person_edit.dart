@@ -2,8 +2,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_blog/pages/person/slideView_edit.dart';
 
 class PersonEditPage extends StatefulWidget {
   @override
@@ -11,10 +11,12 @@ class PersonEditPage extends StatefulWidget {
 }
 
 class _PersonEditPageState extends State<PersonEditPage> {
-  String _avatarUrl = "https://www.itying.com/images/flutter/1.png";
+  String _avatarUrl = "https://www.itying.com/images/flutter/3.png";
   String _name = 'xingxing';
   String _email = "123456@qq.com";
   String _signature = 'So far all life is written with failure, but this does not prevent me from moving forward';
+
+  late List<File> _imageFiles;
 
   List<String> _items = [
     "home",
@@ -34,18 +36,21 @@ class _PersonEditPageState extends State<PersonEditPage> {
   TextEditingController _signatureController = TextEditingController();
 
 
+  // 增加列表
   void _addListItem(String item) {
     setState(() {
       _items.add(item);
     });
   }
 
+  // 删除列表
   void _removeListItem(String item) {
     setState(() {
       _items.remove(item);
     });
   }
 
+  // 列表修改界面的AppBar
   AppBar _buildAppBar() {
     return AppBar(
       title: Text('My List'),
@@ -60,6 +65,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
     );
   }
 
+  // 列表修改界面增加新的列表
   void _addNewItemDialog(BuildContext context) async {
     String? newItemName;
     await showDialog<String>(
@@ -99,6 +105,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
     }
   }
 
+  //! 显示列表修改界面
   Future<void> _showList() async {
     final String result = await showModalBottomSheet(
       context: context,
@@ -132,9 +139,6 @@ class _PersonEditPageState extends State<PersonEditPage> {
       },
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +220,27 @@ class _PersonEditPageState extends State<PersonEditPage> {
               // child: Text('Show List'),
             ),
           ),
+          ListTile(
+            leading: Icon(Icons.slideshow),
+            title: Text(
+              'slideshow',
+            ),
+            subtitle: Text("you can change your slideshow"),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () async {
+                _imageFiles = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SlideViewEdit()));
+                print(_imageFiles);
+                print("成功获得数据");
+              },
+              // child: Text('Show List'),
+            ),
+          ),
+
         ],
       ),
     );
@@ -224,8 +249,9 @@ class _PersonEditPageState extends State<PersonEditPage> {
   // void _editAvatar() {
   //   // TODO: 实现头像编辑功能
   // }
+  // 头像修改界面，调用的下面的类
   Future<void> _editAvatar(BuildContext context) async {
-    final image = await showModalBottomSheet<File?>(
+    final image = await showModalBottomSheet<File?>(:
       context: context,
       builder: (context) => ChangeAvatarBottomSheet(),
     );
@@ -238,8 +264,6 @@ class _PersonEditPageState extends State<PersonEditPage> {
       });
     }
   }
-
-
 
 
 

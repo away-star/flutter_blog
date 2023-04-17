@@ -114,8 +114,6 @@ class _WritePageState extends State<WritePage> {
 
   @override
   Widget build(BuildContext context) {
-    final imageSize = (MediaQuery.of(context).size.width - 32 - 16) / 3;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
