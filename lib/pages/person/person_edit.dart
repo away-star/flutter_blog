@@ -1,5 +1,9 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PersonEditPage extends StatefulWidget {
   @override
@@ -129,6 +133,9 @@ class _PersonEditPageState extends State<PersonEditPage> {
     );
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -150,7 +157,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
         children: <Widget>[
           ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(_avatarUrl),
+              backgroundImage: FileImage(File(_avatarUrl)),
               radius: 28.0,
             ),
             title: Text('Avatar'),
@@ -158,7 +165,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
             trailing: IconButton(
               icon: Icon(Icons.edit),
               onPressed: () {
-                _editAvatar();
+                _editAvatar(context);
               },
             ),
           ),
@@ -214,9 +221,27 @@ class _PersonEditPageState extends State<PersonEditPage> {
     );
   }
 
-  void _editAvatar() {
-    // TODO: 实现头像编辑功能
+  // void _editAvatar() {
+  //   // TODO: 实现头像编辑功能
+  // }
+  Future<void> _editAvatar(BuildContext context) async {
+    final image = await showModalBottomSheet<File?>(
+      context: context,
+      builder: (context) => ChangeAvatarBottomSheet(),
+    );
+
+    if (image != null) {
+      // 将图片上传到云端等其他逻辑
+      setState(() {
+        // 更新新头像图片
+        _avatarUrl = image.path;
+      });
+    }
   }
+
+
+
+
 
   void _editName() {
     showDialog(
@@ -320,5 +345,90 @@ class _PersonEditPageState extends State<PersonEditPage> {
   void _saveProfile() {
     // TODO: 提交表单并更新用户信息
     Navigator.of(context).pop();
+  }
+}
+
+class ChangeAvatarBottomSheet extends StatefulWidget {
+  const ChangeAvatarBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  _ChangeAvatarBottomSheetState createState() => _ChangeAvatarBottomSheetState();
+}
+
+class _ChangeAvatarBottomSheetState extends State<ChangeAvatarBottomSheet> {
+  File? _image;
+
+  Future<void> _getImage(ImageSource source) async {
+    final image = await ImagePicker().getImage(
+      source: source,
+      imageQuality: 50,
+      maxWidth: 800,
+    );
+
+    if (image != null) {
+      setState(() {
+
+        _image = File(image.path);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final primaryColor = theme.primaryColor;
+    final textColor = textTheme.bodyText1!.color;
+
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            'Change Avatar',
+            style: textTheme.headline6!.copyWith(color: textColor),
+          ),
+          SizedBox(height: 16.0),
+          GestureDetector(
+            onTap: () => _getImage(ImageSource.camera),
+            child: CircleAvatar(
+              radius: 50.0,
+              backgroundImage: _image != null ? FileImage(_image!) : null,
+              child: _image == null
+                  ? Icon(Icons.camera_alt, size: 50.0)
+                  : null,
+            ),
+          ),
+          SizedBox(height: 8.0),
+          GestureDetector(
+            onTap: () => _getImage(ImageSource.gallery),
+            child: CircleAvatar(
+              radius: 50.0,
+              backgroundImage: _image != null ? FileImage(_image!) : null,
+              child: _image == null
+                  ? Icon(Icons.photo, size: 50.0)
+                  : null,
+            ),
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context, _image);
+            },
+            style: ElevatedButton.styleFrom(primary: primaryColor),
+            child: Text('Ok'),
+          ),
+          SizedBox(height: 16.0),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -24,7 +24,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  bool _isLoading = true;
+  // bool _isLoading = true;
+  bool _isLoading = false;
   Map<String, dynamic> _data = {};
   late TabController _tabController;
   // late List<String> _tags;
