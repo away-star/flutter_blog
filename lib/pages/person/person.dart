@@ -184,45 +184,45 @@ class _PersonState extends State<Person> {
                           thickness: 1,
                         ),
 
-                        // // 性别
-                        // Row(
-                        //   //让它自动换行
-                        //   mainAxisSize: MainAxisSize.min,
-                        //   children: [
-                        //     Icon(Icons.person,
-                        //         color: Colors.grey[700], size: 23),
-                        //     SizedBox(width: 10),
-                        //     Expanded(
-                        //       child: Text(
-                        //         '${_data['data']['userInfoDto']['gender']}',
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // Divider(
-                        //   color: Colors.grey[300],
-                        //   thickness: 1,
-                        // ),
-                        //
-                        // // 生日
-                        // Row(
-                        //   //让它自动换行
-                        //   mainAxisSize: MainAxisSize.min,
-                        //   children: [
-                        //     Icon(Icons.calendar_today,
-                        //         color: Colors.grey[700], size: 23),
-                        //     SizedBox(width: 10),
-                        //     Expanded(
-                        //       child: Text(
-                        //         '${_data['data']['userInfoDto']['birthday']}',
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // Divider(
-                        //   color: Colors.grey[300],
-                        //   thickness: 1,
-                        // ),
+                        // 性别
+                        Row(
+                          //让它自动换行
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.person,
+                                color: Colors.grey[700], size: 23),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                '${_data['data']['userInfoDto']['gender']}',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 1,
+                        ),
+
+                        // 生日
+                        Row(
+                          //让它自动换行
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.calendar_today,
+                                color: Colors.grey[700], size: 23),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                '${_data['data']['userInfoDto']['birthday']}',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 1,
+                        ),
 
                         // 个性签名
                         Row(

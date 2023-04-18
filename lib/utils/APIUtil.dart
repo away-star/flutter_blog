@@ -1,12 +1,38 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:my_blog/services/dio.dart';
+
+import 'dart:convert';
+
+import 'LogUtil.dart';
+
 
 class DioUtil {
   Future<dynamic> getUserIntialInfo() async {
     Response response = await dio.get('/service-user/information/initial');
+    print(response.data);
+    print(response.data['data']);
+    // String data = JsonEncoder.withIndent('  ').convert(response.data); // 将 Map 数据转换为 JSON 格式的字符串
+    // LogUtil.d(data);
     return response.data;
   }
 
+  // Future<dynamic> putUserIntialInfo() async {
+  //   Response response = await dio.put('/service-user/information/initial');
+  //   return response.data;
+  // }
+
+  //上传随笔
+  Future<dynamic> postEssay(
+      String content, String coverUrl, String createTime) async {
+    Response response = await dio.post('/service-user/essay', data: {
+      'content': content,
+      'coverUrl': coverUrl,
+      'createTime': createTime,
+    });
+    return response.data;
+  }
 
   //登录获取验证码
   Future<dynamic> getLoginCaptcha(String email) async {

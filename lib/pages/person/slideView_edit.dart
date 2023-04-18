@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SlideViewEdit extends StatefulWidget {
-  // final List<File> imageFiles;
+  final List<File> imageFiles;
 
 
-  // SlideViewEdit({Key? key, required this.imageFiles}) : super(key: key);
-  List<File> imageFiles = [];
+  SlideViewEdit({Key? key, required this.imageFiles}) : super(key: key);
+  // List<File> imageFiles = [];
 
   @override
   _SlideViewEditState createState() => _SlideViewEditState();

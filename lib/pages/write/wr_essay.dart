@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_blog/utils/APIUtil.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -136,6 +137,8 @@ class _WritePageState extends State<WritePage> {
             child: InkWell(
               onTap: () {
                 // 发布按钮点击事件
+
+
               },
               child: Center(
                 child: Text(

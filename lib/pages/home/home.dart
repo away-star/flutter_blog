@@ -24,44 +24,44 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  // bool _isLoading = true;
-  bool _isLoading = false;
+  bool _isLoading = true;
+  // bool _isLoading = false;
   Map<String, dynamic> _data = {};
   late TabController _tabController;
-  // late List<String> _tags;
 
-  final List<String> _tags = [
-    "home",
-    "spring boot",
-    "spring cloud",
-    "react",
-    "umi.js",
-    "H5",
-    "flutter",
-    "CSS3",
-    "Music",
-    "Entertainment"
-  ];
+  List<String> _tags = []; // 标签列表
+
+  List<dynamic> _slideList = []; // 轮播图列表
 
   @override
   void initState() {
     super.initState();
-    fetchData();
-    // posts = generatePosts(); //初始化生成数据
-    // print(posts);
+    fetchData().then((_) {
+      _tabController = TabController(length: _tags.length, vsync: this);
+      setState(() {
+
+      }); // 重新渲染
+    });
     print("我被执行了");
-    _tabController = TabController(length: _tags.length, vsync: this);
+    print(_slideList);
+    print(_slideList.runtimeType);
+    print("成功取出tags!!!!!!!!!!!!!!!!!!!!!!");
   }
 
-  Future<String?> fetchData() async {
+  Future<void> fetchData() async {
     var res = await DioUtil().getUserIntialInfo();
     setState(() {
       _data = res;
       _isLoading = false;
-      // _tags = _data['data']['loginInformationId']['labels'];
-      // print(_data['data']['loginInformationId']['labels']);
+      var labels = _data['data']['labels'];
+      var slides =_data['data']['userInfoDto']['slideVenue'];
+      _tags = ['home', ...[for (final entry in labels) entry['title'].toString()], 'space', 'entertainment'];
+      print(_data['data']['userInfoDto']['slideVenue']);
+      _slideList = slides;
+      print(_slideList);
+      print(slides.runtimeType);
+      _isLoading = false;
     });
-    return "success";
   }
 
   int _currentIndex = 0;
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (i == 0) {
         tabViews.add(CustomScrollView(
           slivers: [
-            SlideShow(),
+            SlideShow(slideList: _slideList,),
             PostList(posts: generatePosts()),
           ],
         ));

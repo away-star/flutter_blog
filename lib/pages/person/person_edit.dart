@@ -11,12 +11,24 @@ class PersonEditPage extends StatefulWidget {
 }
 
 class _PersonEditPageState extends State<PersonEditPage> {
-  String _avatarUrl = "https://www.itying.com/images/flutter/3.png";
+  String _avatarUrl = "https://www.itying.com/images/flutter/2.png";
   String _name = 'xingxing';
   String _email = "123456@qq.com";
   String _signature = 'So far all life is written with failure, but this does not prevent me from moving forward';
 
   late List<File> _imageFiles;
+
+
+  // _PersonEditPageState(
+  //     this._avatarUrl,
+  //     this._name,
+  //     this._email,
+  //     this._signature,
+  //     this._imageFiles,
+  //     this._items,
+  //     this._nameController,
+  //     this._emailController,
+  //     this._signatureController);
 
   List<String> _items = [
     "home",
@@ -233,7 +245,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            SlideViewEdit()));
+                            SlideViewEdit(imageFiles: _imageFiles)));
                 print(_imageFiles);
                 print("成功获得数据");
               },
@@ -251,7 +263,7 @@ class _PersonEditPageState extends State<PersonEditPage> {
   // }
   // 头像修改界面，调用的下面的类
   Future<void> _editAvatar(BuildContext context) async {
-    final image = await showModalBottomSheet<File?>(:
+    final image = await showModalBottomSheet<File?>(
       context: context,
       builder: (context) => ChangeAvatarBottomSheet(),
     );
@@ -368,6 +380,8 @@ class _PersonEditPageState extends State<PersonEditPage> {
 
   void _saveProfile() {
     // TODO: 提交表单并更新用户信息
+
+
     Navigator.of(context).pop();
   }
 }

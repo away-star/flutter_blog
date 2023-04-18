@@ -17,7 +17,6 @@ class Head extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // 打印检查主页
     // print(isUser);
 
@@ -106,7 +105,7 @@ class Head extends StatelessWidget {
       // ),
       bottom: TabBar(
         onTap: (index) {
-          if (index==8 || index==9) {
+          if (index == 8 || index == 9) {
             print('y');
           }
         },
@@ -127,58 +126,81 @@ class Head extends StatelessWidget {
         //未选中标签的文本颜色
         unselectedLabelColor: Colors.grey,
         //标签
-        tabs: [
-          //将tags中的每个元素转换成一个Tab，并将它们组成列表
-          // ...tags.map((tag) => Tab(text: tag)).toList(),
-
-          Tab(
-            icon: Icon(Icons.home),
-            text: 'home',
-          ),
-          Tab(
-            icon: Icon(Icons.wifi),
-            text: 'spring boot',
-          ),
-          Tab(
-            icon: Icon(Icons.cloud),
-            text: 'spring cloud',
-          ),
-          Tab(
-            icon: Icon(Icons.web),
-            text: 'react',
-          ),
-          Tab(
-            icon: Icon(Icons.web_asset),
-            text: 'umi.js',
-          ),
-          Tab(
-            icon: Icon(Icons.phone_iphone),
-            text: 'H5',
-          ),
-          Tab(
-            icon: Icon(Icons.flutter_dash),
-            text: 'flutter',
-          ),
-          Tab(
-            icon: Icon(Icons.style),
-            text: 'CSS3',
-          ),
-
-          Tab(
-            icon: Icon(
-              Icons.catching_pokemon,
-              color: Colors.cyan,
-            ),
-            text: 'Spaces',
-          ),
-          Tab(
-            icon: Icon(
-              Icons.beach_access_outlined,
-              color: Colors.cyan,
-            ),
-            text: 'Entertainment',
-          ),
-        ],
+        tabs: tags.map((tag) {
+          if (tag == 'home') {
+            return Tab(
+              text: tag,
+              icon: Icon(Icons.home, color: Colors.lightBlue),
+            );
+          } else if (tag == 'space') {
+            return Tab(
+              text: tag,
+              icon: Icon(Icons.catching_pokemon, color: Colors.cyan),
+            );
+          } else if (tag == 'entertainment') {
+            return Tab(
+              text: tag,
+              icon: Icon(Icons.beach_access_outlined, color: Colors.cyan),
+            );
+          } else {
+            return Tab(
+              icon: Icon(Icons.web),
+              text: tag,
+            );
+          }
+        }).toList(),
+        // tabs: [
+        //   //将tags中的每个元素转换成一个Tab，并将它们组成列表
+        //   // ...tags.map((tag) => Tab(text: tag)).toList(),
+        //
+        //   Tab(
+        //     icon: Icon(Icons.home),
+        //     text: 'home',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.wifi),
+        //     text: 'spring boot',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.cloud),
+        //     text: 'spring cloud',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.web),
+        //     text: 'react',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.web_asset),
+        //     text: 'umi.js',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.phone_iphone),
+        //     text: 'H5',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.flutter_dash),
+        //     text: 'flutter',
+        //   ),
+        //   Tab(
+        //     icon: Icon(Icons.style),
+        //     text: 'CSS3',
+        //   ),
+        //
+        //   Tab(
+        //     icon: Icon(
+        //       Icons.catching_pokemon,
+        //       color: Colors.cyan,
+        //     ),
+        //     text: 'Spaces',
+        //   ),
+        //   Tab(
+        //     icon: Icon(
+        //       Icons.beach_access_outlined,
+        //       color: Colors.cyan,
+        //     ),
+        //     text: 'Entertainment',
+        //   ),
+        // ],
       ),
     );
   }
