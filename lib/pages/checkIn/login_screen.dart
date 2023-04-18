@@ -54,7 +54,7 @@ class LoginScreen extends StatelessWidget {
     // Generate a random number between 0 and 100
     final int randomNumber = 1 + Random().nextInt(9);
     // Show a dialog with a slider that goes from 0 to 100
-    return true;
+    // return true;
     // 这里为了方便调试，先去掉的防爆破!!??！！？？
     final result = await showDialog<int>(
       context: context,
