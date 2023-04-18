@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_blog/utils/APIUtil.dart';
+
+import '../../services/dio.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -41,17 +43,13 @@ class _WritePageState extends State<WritePage> {
           padding: EdgeInsets.all(12.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
-            color: selected ? Theme
-                .of(context)
-                .accentColor : Colors.transparent,
+            color:
+                selected ? Theme.of(context).accentColor : Colors.transparent,
           ),
           child: Icon(
             iconData,
             size: 30,
-            color: selected ? Colors.white : Theme
-                .of(context)
-                .iconTheme
-                .color,
+            color: selected ? Colors.white : Theme.of(context).iconTheme.color,
           ),
         ),
       ),
@@ -63,10 +61,7 @@ class _WritePageState extends State<WritePage> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height / 4,
+          height: MediaQuery.of(context).size.height / 4,
           child: Column(
             children: [
               Padding(
@@ -112,7 +107,6 @@ class _WritePageState extends State<WritePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,18 +129,26 @@ class _WritePageState extends State<WritePage> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
                 // 发布按钮点击事件
-
-
+                Map<String, dynamic> data = {
+                  "content": "${_textEditingController.text}",
+                  "coverUrl": "",
+                  "mood": "${_selectedMood}",
+                  "open": true,
+                  "urls": []
+                };
+                Response response = await dio.post(
+                  '/service-content/essay', // 替换成您的API接口URL
+                  data: data,
+                );
+                print(response.data);
               },
               child: Center(
                 child: Text(
                   'Publish',
                   style: TextStyle(
-                    color: Theme
-                        .of(context)
-                        .accentColor,
+                    color: Theme.of(context).accentColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -162,9 +164,7 @@ class _WritePageState extends State<WritePage> {
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-            color: Theme
-                .of(context)
-                .accentColor,
+            color: Theme.of(context).accentColor,
             borderRadius: BorderRadius.circular(30),
           ),
           child: Icon(_selectedMood, color: Colors.white, size: 35),
@@ -209,8 +209,10 @@ class _WritePageState extends State<WritePage> {
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
                 children: List.generate(
-                  _imageFiles.length < 9 ? _imageFiles.length + 1 : _imageFiles.length,
-                      (index) {
+                  _imageFiles.length < 9
+                      ? _imageFiles.length + 1
+                      : _imageFiles.length,
+                  (index) {
                     if (index == _imageFiles.length && _imageFiles.length < 9) {
                       return InkWell(
                         onTap: _selectAndUploadImage,
@@ -243,7 +245,8 @@ class _WritePageState extends State<WritePage> {
                           Positioned.fill(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(6.0),
-                              child: Image.file(_imageFiles[index], fit: BoxFit.cover),
+                              child: Image.file(_imageFiles[index],
+                                  fit: BoxFit.cover),
                             ),
                           ),
                           Positioned(
@@ -270,8 +273,6 @@ class _WritePageState extends State<WritePage> {
               ),
             ),
           ),
-
-
         ],
       ),
     );

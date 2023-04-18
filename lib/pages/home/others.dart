@@ -74,6 +74,7 @@
 //   }
 // }
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../checkIn/custom_route.dart';
@@ -82,9 +83,9 @@ import 'home.dart';
 class SpacePage extends StatelessWidget {
   final List<String> images = [
     'https://picsum.photos/id/101/400/600',
-    'https://picsum.photos/id/102/400/600',
+    'https://picsum.photos/id/291/400/600',
     'https://picsum.photos/id/276/800/1200',
-    'https://picsum.photos/id/291/800/568',
+    'https://picsum.photos/id/301/800/568',
     'https://picsum.photos/id/292/800/1067',
     'https://picsum.photos/id/305/800/500',
     'https://picsum.photos/id/309/800/1200',
@@ -138,11 +139,16 @@ class SpacePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // 实际图像（可能尚未加载完成）
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      images[index],
-                      fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: CachedNetworkImage(
+                      imageUrl:
+                      '${images[index]}',
+                      placeholder: (context, url) => Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
                   Padding(

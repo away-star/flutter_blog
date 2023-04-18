@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,6 +15,7 @@ import 'package:my_blog/pages/home/data.dart';
 import 'package:my_blog/pages/write/wr_essay.dart';
 
 import '../../utils/APIUtil.dart';
+import '../../utils/LogUtil.dart';
 
 class Home extends StatefulWidget {
   bool check = true;
@@ -30,8 +33,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   List<String> _tags = []; // 标签列表
-
   List<dynamic> _slideList = []; // 轮播图列表
+
+
+  List<Post> _posts = []; // 文章列表
 
   @override
   void initState() {
@@ -49,20 +54,39 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   Future<void> fetchData() async {
-    var res = await DioUtil().getUserIntialInfo();
+    var userInfo = await DioUtil().getUserIntialInfo();
+    var postPage = await DioUtil().getPostPage();
     setState(() {
-      _data = res;
+      // 加载动态个人信息
       _isLoading = false;
-      var labels = _data['data']['labels'];
-      var slides =_data['data']['userInfoDto']['slideVenue'];
+      var labels = userInfo['data']['labels'];
+      var slides = userInfo['data']['userInfoDto']['slideVenue'];
       _tags = ['home', ...[for (final entry in labels) entry['title'].toString()], 'space', 'entertainment'];
-      print(_data['data']['userInfoDto']['slideVenue']);
       _slideList = slides;
-      print(_slideList);
-      print(slides.runtimeType);
+
+
+      // 加载动态文章信息
+      print("转化中");
+      _posts = postsFromJson(postPage); // 使用函数转化
+      print("转化成功");
+
+      print(_posts[0].image);
+
       _isLoading = false;
     });
   }
+
+  // 转换函数
+  List<Post> postsFromJson(Map<String, dynamic> postPage) {
+    final List<dynamic> postsResponse = postPage['data']['records'];
+    List<Post> posts = [];
+    for (var postJson in postsResponse) {
+      Post post = Post.fromJson(postJson);
+      posts.add(post);
+    }
+    return posts;
+  }
+
 
   int _currentIndex = 0;
   late List<Post> posts;
@@ -73,7 +97,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-//! 造数据，这里展示20条数据
+//! mock数据，这里展示20条数据
   List<Post> generatePosts() {
     List<Post> fake = [];
     for (int i = 0; i < 20; i++) {
@@ -102,7 +126,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         tabViews.add(CustomScrollView(
           slivers: [
             SlideShow(slideList: _slideList,),
-            PostList(posts: generatePosts()),
+            PostList(posts: _posts),
           ],
         ));
         continue;
@@ -117,7 +141,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
       tabViews.add(CustomScrollView(
         slivers: [
-          PostList(posts: generatePosts()),
+          PostList(posts: _posts),
         ],
       ));
     }

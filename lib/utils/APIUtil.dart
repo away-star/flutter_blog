@@ -7,13 +7,22 @@ import 'dart:convert';
 
 import 'LogUtil.dart';
 
-
 class DioUtil {
   Future<dynamic> getUserIntialInfo() async {
     Response response = await dio.get('/service-user/information/initial');
-    print(response.data);
     print(response.data['data']);
-    // String data = JsonEncoder.withIndent('  ').convert(response.data); // 将 Map 数据转换为 JSON 格式的字符串
+    // String data = JsonEncoder.withIndent('  ')
+    //     .convert(response.data); // 将 Map 数据转换为 JSON 格式的字符串
+    // LogUtil.d(data);
+    return response.data;
+  }
+
+  Future<dynamic> getPostPage() async {
+    Response response = await dio.get('/service-content/post/page',
+        queryParameters: {'authorId': 20211120053, 'step': 5});
+    print(response.data['data']);
+    // String data = JsonEncoder.withIndent('  ')
+    //     .convert(response.data); // 将 Map 数据转换为 JSON 格式的字符串
     // LogUtil.d(data);
     return response.data;
   }
@@ -25,10 +34,11 @@ class DioUtil {
 
   //上传随笔
   Future<dynamic> postEssay(
-      String content, String coverUrl, String createTime) async {
+      String content, String coverUrl, String mood, String createTime) async {
     Response response = await dio.post('/service-user/essay', data: {
       'content': content,
       'coverUrl': coverUrl,
+      'mood': mood,
       'createTime': createTime,
     });
     return response.data;
@@ -63,25 +73,6 @@ class DioUtil {
       '/service-user/user/mail/recover/captcha',
       queryParameters: {'email': email},
     );
-    print(response.data.runtimeType);
-    return response.data;
-  }
-
-  //注册
-  Future<dynamic> register(
-      String email, String captcha, String password) async {
-    // Dio dio = Dio();
-    // 发送Get请求，并添加查询参数
-    Response response = await dio.post(
-      '/service-user/user/register',
-      data: {
-        'email': email,
-        'captcha': captcha,
-        'password': password,
-        'registerType': 'email'
-      },
-    );
-    print(response);
     print(response.data.runtimeType);
     return response.data;
   }

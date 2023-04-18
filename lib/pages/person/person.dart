@@ -230,7 +230,7 @@ class _PersonState extends State<Person> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.bookmark_border,
-                                color: Colors.grey[700], size: 29),
+                                color: Colors.grey[700], size: 27),
                             SizedBox(width: 10),
                             Expanded(
                               child: Text(

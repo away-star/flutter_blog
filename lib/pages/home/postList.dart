@@ -1,8 +1,12 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_blog/pages/detail/MyMD.dart';
 import 'package:my_blog/pages/detail/detail.dart';
+
+import 'data.dart';
 
 class Post {
   final String title;
@@ -26,6 +30,20 @@ class Post {
     required this.comments,
     required this.id,
   });
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      title: json['title'],
+      content: json['content'],
+      author: getAuthor(),
+      date: json['createTime'],
+      tag: json['category'],
+      image: json['coverUrl'],
+      thume_up_num: Random().nextInt(1000).toString(),
+      comments:  geneComments(),
+      id: json['id'].toString(),
+    );
+  }
 }
 
 class PostList extends StatelessWidget {
@@ -77,7 +95,7 @@ class PostList extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5.0),
                     child: CachedNetworkImage(
                       imageUrl:
-                          'https://picsum.photos/seed/${posts[index].image}/600/400',
+                          '${posts[index].image}',
                       placeholder: (context, url) => Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -138,7 +156,7 @@ class PostList extends StatelessWidget {
           );
         },
         //childCount: posts.length,
-        childCount: 20, //测试用
+        childCount: posts.length, //测试用
       ),
     );
   }
