@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_blog/pages/person/login_page.dart';
 import 'package:my_blog/pages/person/person.dart';
+import 'package:my_blog/pages/person/person_edit.dart';
 
 class personList extends StatelessWidget {
   // final String text;
@@ -32,10 +33,19 @@ class personList extends StatelessWidget {
               ),
             ),
 
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/images/avatar.jpg'),
-              //这里设置的是半径
-              radius: 40,
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PersonEditPage()));
+              },
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/avatar.jpg'),
+                //这里设置的是半径
+                radius: 40,
+              ),
             ),
             SizedBox(height: 10,),
             Text('xingxing',
@@ -46,130 +56,144 @@ class personList extends StatelessWidget {
               thickness: 1,
             ),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) {
-                        return Person(
-                          name: "xingxing",
-                          email: "2064989403@qq.com",
-                          signature:
-                          "So far all life is written with failure, but this does not prevent me from moving forward",
-                          location: "China",
-                        );
-                      }));
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(
-                  Icons.person_pin_outlined, color: Colors.grey, size: 30,),
-                // 图标
-                label: Text(
-                  'Personal Information',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+            // 所有的点击事件都是用InkWell包裹，使用onTap处理
+            InkWell(
+              onTap: () {
+                // 点击事件处理
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) {
+                    return Person();
+                    }));
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(
+                    Icons.person_pin_outlined, color: Colors.grey, size: 30,),
+                  // 图标
+                  label: Text(
+                    'Personal Information',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),
             ),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(
-                  Icons.notification_add, color: Colors.grey, size: 30,), // 图标
-                label: Text(
-                  'Notification',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+
+            InkWell(
+              onTap: () {
+
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(
+                    Icons.notification_add, color: Colors.grey, size: 30,), // 图标
+                  label: Text(
+                    'Notification',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(
-                  Icons.stacked_bar_chart, color: Colors.grey, size: 30,), // 图标
-                label: Text(
-                  'Your content and stats',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+
+            InkWell(
+              onTap: () {
+
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(
+                    Icons.stacked_bar_chart, color: Colors.grey, size: 30,), // 图标
+                  label: Text(
+                    'Your content and stats',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(
-                  Icons.pending_actions, color: Colors.grey, size: 30,), // 图标
-                label: Text(
-                  'Drafts',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+
+            InkWell(
+              onTap: () {
+
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(
+                    Icons.pending_actions, color: Colors.grey, size: 30,), // 图标
+                  label: Text(
+                    'Drafts',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(
-                  Icons.bookmark_add_outlined, color: Colors.grey, size: 30,),
-                // 图标
-                label: Text(
-                  'Bookmarks',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+
+            InkWell(
+              onTap: () {
+
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(
+                    Icons.bookmark_add_outlined, color: Colors.grey, size: 30,),
+                  // 图标
+                  label: Text(
+                    'Bookmarks',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),
@@ -178,26 +202,30 @@ class personList extends StatelessWidget {
               color: Colors.grey[300],
               thickness: 1,
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: () {
-                  // 点击事件处理
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 30.0, vertical: 12.0), // 内间距
-                  // backgroundColor: Colors.white, // 背景色
-                ),
-                icon: Icon(Icons.login, color: Colors.grey, size: 30,), // 图标
-                label: Text(
-                  'Log In',
-                  style: TextStyle(
-                    color: Colors.grey, // 文字颜色
-                    fontSize: 20.0, // 文字大小
-                    fontWeight: FontWeight.bold, // 加粗
+
+            InkWell(
+              onTap: () {
+                // 点击事件处理
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: null,
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30.0, vertical: 12.0), // 内间距
+                    // backgroundColor: Colors.white, // 背景色
+                  ),
+                  icon: Icon(Icons.login, color: Colors.grey, size: 30,), // 图标
+                  label: Text(
+                    'Log In',
+                    style: TextStyle(
+                      color: Colors.grey, // 文字颜色
+                      fontSize: 20.0, // 文字大小
+                      fontWeight: FontWeight.bold, // 加粗
+                    ),
                   ),
                 ),
               ),

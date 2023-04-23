@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,40 +12,84 @@ import 'package:my_blog/services/homeAPI.dart';
 import 'package:my_blog/pages/home/essay.dart';
 import 'dart:math';
 import 'package:my_blog/pages/home/data.dart';
+import 'package:my_blog/pages/write/wr_essay.dart';
+
+import '../../utils/APIUtil.dart';
+import '../../utils/LogUtil.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  bool check = true;
+
+  Home({Key? key, this.check = true}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  bool _isLoading = true;
+  // bool _isLoading = false;
+  Map<String, dynamic> _data = {};
   late TabController _tabController;
 
-  int _currentIndex = 0;
-  final List<String> _tags = [
-    "home",
-    "spring boot",
-    "spring cloud",
-    "react",
-    "umi.js",
-    "H5",
-    "flutter",
-    "CSS3",
-    "Music",
-    "Entertainment"
-  ];
-  late List<Post> posts;
+  List<String> _tags = []; // 标签列表
+  List<dynamic> _slideList = []; // 轮播图列表
+
+
+  List<Post> _posts = []; // 文章列表
 
   @override
   void initState() {
     super.initState();
-    // posts = generatePosts(); //初始化生成数据
-    // print(posts);
+    fetchData().then((_) {
+      _tabController = TabController(length: _tags.length, vsync: this);
+      setState(() {
+
+      }); // 重新渲染
+    });
     print("我被执行了");
-    _tabController = TabController(length: _tags.length, vsync: this);
+    print(_slideList);
+    print(_slideList.runtimeType);
+    print("成功取出tags!!!!!!!!!!!!!!!!!!!!!!");
   }
+
+  Future<void> fetchData() async {
+    var userInfo = await DioUtil().getUserIntialInfo();
+    var postPage = await DioUtil().getPostPage();
+    setState(() {
+      // 加载动态个人信息
+      _isLoading = false;
+      var labels = userInfo['data']['labels'];
+      var slides = userInfo['data']['userInfoDto']['slideVenue'];
+      _tags = ['home', ...[for (final entry in labels) entry['title'].toString()], 'space', 'entertainment'];
+      _slideList = slides;
+
+
+      // 加载动态文章信息
+      print("转化中");
+      _posts = postsFromJson(postPage); // 使用函数转化
+      print("转化成功");
+
+      print(_posts[0].image);
+
+      _isLoading = false;
+    });
+  }
+
+  // 转换函数
+  List<Post> postsFromJson(Map<String, dynamic> postPage) {
+    final List<dynamic> postsResponse = postPage['data']['records'];
+    List<Post> posts = [];
+    for (var postJson in postsResponse) {
+      Post post = Post.fromJson(postJson);
+      posts.add(post);
+    }
+    return posts;
+  }
+
+
+  int _currentIndex = 0;
+  late List<Post> posts;
 
   @override
   void dispose() {
@@ -51,7 +97,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-//! 造数据，这里展示20条数据
+//! mock数据，这里展示20条数据
   List<Post> generatePosts() {
     List<Post> fake = [];
     for (int i = 0; i < 20; i++) {
@@ -79,8 +125,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       if (i == 0) {
         tabViews.add(CustomScrollView(
           slivers: [
-            SlideShow(),
-            PostList(posts: generatePosts()),
+            SlideShow(slideList: _slideList,),
+            PostList(posts: _posts),
           ],
         ));
         continue;
@@ -95,7 +141,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
       tabViews.add(CustomScrollView(
         slivers: [
-          PostList(posts: generatePosts()),
+          PostList(posts: _posts),
         ],
       ));
     }
@@ -104,28 +150,51 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // !原先单页的代码
-      // body: CustomScrollView(
-      //
-      //   slivers: [
-      //     Head(tabController: _tabController, tags: _tags),
-      //     SlideShow(),
-      //     PostList(posts: this.posts),
-      //   ],
-      // ),
-      //! 这里显示的滚动条下的页面，这里可以用head了
-      body: CustomScrollView(
-        slivers: [
-          Head(tabController: _tabController, tags: _tags),
-          SliverFillRemaining(
-            child: TabBarView(
-              controller: _tabController,
-              children: generateTabViews(),
+    // 打印检查主页
+    // print(widget.check);
+
+    return _isLoading
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: Center(
+              child: CircularProgressIndicator.adaptive(),
             ),
           )
-        ]
-      ),
-    );
+        : Scaffold(
+            // !原先单页的代码
+            // body: CustomScrollView(
+            //
+            //   slivers: [
+            //     Head(tabController: _tabController, tags: _tags),
+            //     SlideShow(),
+            //     PostList(posts: this.posts),
+            //   ],
+            // ),
+            //! 这里显示的滚动条下的页面，这里可以用head了
+            body: CustomScrollView(slivers: [
+              Head(
+                  tabController: _tabController,
+                  tags: _tags,
+                  isUser: widget.check),
+              SliverFillRemaining(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: generateTabViews(),
+                ),
+              )
+            ]),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                // 按钮被按下时执行的操作
+                print(_tabController.index);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WritePage()),
+                );
+              },
+              child: Icon(Icons.add),
+              backgroundColor: Colors.blue,
+            ),
+          );
   }
 }

@@ -15,7 +15,7 @@ class Constants {
 
 
   //API相关
-  static const String apiBaseUrl = 'http://localhost:9000';
+  static const String apiBaseUrl = 'https://4c5e-39-129-5-52.ngrok-free.app';
   static const String clientId = 'cross-end';
   static const String clientSecret = 'cross-end';
   static const String grantType = 'password';

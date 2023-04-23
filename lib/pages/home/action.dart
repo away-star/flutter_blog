@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_blog/pages/home/fun.dart';
+import 'package:my_blog/pages/home/others.dart';
+import 'package:my_blog/mock/home.dart';
 
 
 class MyAction extends StatelessWidget {
@@ -13,7 +14,8 @@ class MyAction extends StatelessWidget {
           icon: Icon(Icons.stars_outlined, color: Colors.black),
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return FunWidgetsPage();
+              // return SpacePage(nameList: MOCK_NAMELIST);
+              return SpacePage();
             }));
           },
         ),

@@ -4,12 +4,12 @@ import 'package:my_blog/pages/home/data.dart';
 
 class Post_essay {
   Post_essay(
-      {required this.author,
+      {required this.mood,
       required this.publishTime,
       required this.content,
       required this.images});
 
-  final String author;
+  final String mood;
   final String publishTime;
   final String content;
   final List<String> images;
@@ -24,6 +24,7 @@ class essayListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 随笔列表
+
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -43,7 +44,7 @@ class essayListPage extends StatelessWidget {
                     // ),
                     // SizedBox(width: 8),
                     Text(
-                      "Edited by " + post.author,
+                      "Editing mood: " + post.mood,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Expanded(child: SizedBox()),
@@ -84,7 +85,7 @@ class essayListPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (post.images.length == 4)
+                if (post.images.length == 4)
                   Column(
                     children: [
                       Row(
@@ -153,6 +154,7 @@ class essayListPage extends StatelessWidget {
           );
         },
         childCount: this.posts.length,
+        // childCount: 10,
       ),
     );
   }

@@ -3,7 +3,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class SlideShow extends StatefulWidget {
-  const SlideShow({Key? key}) : super(key: key);
+  final List<dynamic> slideList;
+  SlideShow({Key? key, required this.slideList}) : super(key: key);
 
   @override
   State<SlideShow> createState() => _SlideShowState();
@@ -34,7 +35,7 @@ class _SlideShowState extends State<SlideShow> {
         // 使用 CarouselSlider.builder 构建一个图片轮播组件
         child: CarouselSlider.builder(
           // 图片数量
-          itemCount: 5,
+          itemCount: widget.slideList.length,
           // 轮播配置选项
           options: CarouselOptions(
             height: 200.0,
@@ -60,7 +61,8 @@ class _SlideShowState extends State<SlideShow> {
           itemBuilder: (BuildContext context, int index, int? _) {
             return CachedNetworkImage(
               // 图片 URL
-              imageUrl: 'https://picsum.photos/seed/${index + 1}/600/400',
+              // imageUrl: 'https://picsum.photos/seed/${index + 1}/600/400',
+              imageUrl: widget.slideList[index],
               // 图片构建器
               imageBuilder: (context, imageProvider) => Container(
                 // 图片容器样式
@@ -77,7 +79,7 @@ class _SlideShowState extends State<SlideShow> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      5,
+                      widget.slideList.length,
                       (i) => Container(
                         width: 6.0,
                         height: 6.0,
